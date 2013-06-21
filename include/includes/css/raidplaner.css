@@ -1,0 +1,277 @@
+@charset "utf-8";
+
+/* CSS Document */
+img{ border: none; }
+.left{ float: left; margin-right: 1%; }
+.right{ float: right; margin-left: 1%; }
+.borderRadius3{ border-radius: 3px; }
+.borderRadius5up{ border-radius: 4px 4px 0 0; }
+.borderRadius5bo{ border-radius: 0 0 4px 4px; }
+.padding3{ padding: 3px; }
+
+
+/* Text */
+.small { font-size: 10px; }
+.shadoww{ text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.7); font-weight: bold; }
+.shadowb{ text-shadow: 1px 1px 0 rgba( 0, 0, 0, 0.7); font-weight: bold; }
+.red{ color: red; }
+.green{ color: green; }
+
+
+/* Bilder */
+.raidIcons{ width: 24px; }
+input[type=image] { width: 17px; }
+
+
+/* raidrang */
+.RaidPermission{  }
+.Raidplaner{ font-weight: bold; text-decoration: underline; }
+
+
+/* jQuery */
+.hide, confirm { display: none; }
+form#apply label.error { display: none; }
+#dialog, #dialogMsg {
+	text-align: left;
+	z-index: 1200;
+}
+#tooltip { position: absolute; }
+.tooltip, #tooltip  {
+	display: none;	
+	font-size: 13px;
+	max-width: 450px;
+	
+	padding: 3px;
+	margin-top: 1px;
+	margin-left: 1px;
+	margin-right: 1px;
+	
+	color: #FFF;
+	background-color: rgba( 0, 0, 0, 0.7);
+	
+	border: 3px solid rgba( 255, 255, 255, 0.6);
+	border-radius: 8px;
+}
+
+.tooltip div, .tooltip  span, #tooltip div, #tooltip span { text-align: left; }
+
+
+/* HTML-Formulare */
+[readonly=readonly] { opacity: 0.5; }
+#intWheel, #timeWheel { text-align: center; }
+#removeCode select{
+	display: none;
+}
+#standart, #standart select, .standart select
+{	font-family: Ubuntu;
+	font-size: 12px;
+	text-align: left;
+}
+
+
+/* PHP-Function: arrPrint */
+[id*='arrPrint']{ border: 4px dotted red; margin: 5px; padding: 5px; }
+[id*='arrPrint'] div{ border: 3px solid green; display: none; padding: 10px; overflow: auto; background-color: #333; color: #CCC; margin-bottom: 5px; }
+
+
+/*********************
+ *	Gruppen Anzeige
+ ********************/
+.gruppen td, .gruppen h1  { 
+	color: #FFF!important; 
+	font-weight: bold!important;
+	text-align: center;
+	text-shadow: 1px 1px 3px #000!important;
+}
+
+.gruppen h1 { 
+	font-size: 60px!important;
+	text-align: center;
+	text-shadow: 0 0 3px #000!important;
+}
+
+.gruppenDetails{ 
+	padding: 3px;
+	border-top: 1px solid rgba( 0, 0, 0, 0.25 );
+	background-color: rgba( 0, 0, 0, 0.5)!important;
+}
+
+.gruppenDetails div{
+	padding: 2px;
+	font-size: 16px;
+}
+
+
+/*********************
+ *	Charakter Anzeige
+ ********************/
+.charList a { 
+	color: #FFF;
+	text-decoration: none;
+}
+
+.charListTitle{ 
+	padding: 5px;
+	
+	margin-top: 10px;
+	margin-bottom: 5px;
+	border-radius: 20px;
+	
+	color: #FFF;
+	font-family: Ubuntu;
+	font-size: 20px;
+	
+	box-shadow: 1px 1px 3px #000;
+	border: 3px solid rgba( 0, 0, 0, 0.3);
+}
+
+.charList{
+	background-color: #090502;
+	border-radius: 20px; 
+	
+	height: 84px;
+	margin-bottom: 3px;
+}
+
+.nr1, .nr2, .nr3, .nr4 { max-height: 84px; overflow: hidden; font-family: Ubuntu; float: left; }
+.nr1{ width: 150px; text-align: center; line-height: 21px; color: #FFF; font-size: 14px;}
+.nr3{ line-height: 82px; margin-left: 20px; font-size: 30px; font-weight: bold; }
+.nr4{ width: 110px; text-align: right; float: right; color: #FFF; font-size: 14px; margin: 0 15px 0 5px; padding-top: 50px; }
+.nr4 img{ width: 25px; }
+
+.inset { 
+	border-radius: 20px; 
+	border-top: 5px solid;
+	border-bottom: 5px solid;
+}
+
+.CharakterKlassenBackground {
+	background-color: #090502;
+	color: #FFF;
+}
+
+.CharakterDetailsName{ 
+	padding-left: 180px; 
+	height: 116px;
+	line-height: 150px;
+	font-family: Ubuntu;
+	font-size: 40px;
+	font-weight: bold;
+}
+
+#standart select, .standart select{
+	width: 150px;
+}
+
+.raidrangCharakter {
+	float: left;
+}
+
+.raidrangCharakter span {
+	display: block;
+	margin: 1px;
+	border: 5px solid rgba( 0, 0, 0, 0.1);
+}
+
+
+/*********************
+ *	Kalender Anzeige
+ ********************/
+.kalenderHead {
+	color: #000;
+	font-size: 16px;
+	text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.5 );
+}
+.kalender td, .wochentage {
+	text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.8 );
+	font-weight: bold;
+}
+
+.kalenderInhalt td { 	
+	text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.8 );
+	font-weight: 100;
+	font-size: 10px!important;
+}
+
+.kalender_tag, .wochentage{
+	font-family: Arial;
+	font-size: 16px;
+	text-align: left;
+}
+
+.kalender_tag {
+	border-bottom: 1px dotted rgba( 0, 0, 0, 0.2);
+}
+
+
+/*********************
+ *	Status Anzeige
+ ********************/
+.status{
+	font-weight: bold;
+	color: rgba( 255, 255, 255, 0.85);
+}
+
+.status div{
+	min-height: 25px;
+	line-height: 25px;
+	margin-bottom: 3px;
+	padding: 3px 3px 3px 40px;
+	border-radius: 5px;
+	text-shadow: -1px -1px 0 rgba( 0, 0, 0, 0.5);
+}
+
+.status ol {
+	margin: 0;
+}
+
+.status ol li{
+	height: 18px;
+}
+
+.status a{
+	color: #FFF;
+	font-style: normal;
+}
+
+.status b { color: red!important; }
+
+.status_3{
+	background: #007c87 url('../../../include/raidplaner/images/icons/info.png') no-repeat 5px center;
+	border: 3px solid rgba( 255, 255, 255, 0.5);
+}
+
+
+.status_2{
+	background: #7b3500 url('../../../include/raidplaner/images/icons/attention.png') no-repeat 5px center;
+	border: 3px solid rgba( 255, 255, 255, 0.5);
+}
+
+.status_1{
+	background: darkgreen url('../../../include/raidplaner/images/icons/validgreen.png') no-repeat 5px center;
+	border: 3px solid rgba( 255, 255, 255, 0.5);;
+}
+
+.status_0{
+	background: darkred url('../../../include/raidplaner/images/icons/cancel.png') no-repeat 5px center;
+	border: 3px solid rgba( 255, 255, 255, 0.5);
+}
+
+.ui-combobox {
+        position: relative;
+        display: inline-block;
+    }
+.ui-combobox-toggle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin-left: -1px;
+	padding: 0;
+	/* adjust styles for IE 6/7 */
+	*height: 1.7em;
+	*top: 0.1em;
+}
+.ui-combobox-input {
+	margin: 0;
+	padding: 0.3em;
+}

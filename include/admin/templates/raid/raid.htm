@@ -1,0 +1,163 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class='border'>
+	<tr>
+		<td class="Cdark" colspan="2">
+			{PERM:createRaid}<a class="button" href="admin.php?raid-create" fancybox="inline">Event Erstellen</a>{/PERM}
+			<a class="button" href="admin.php?raid-kalender" kalender="">Kalender Ansicht</a>
+			<div style="float: right;">
+				{PERM:removeRaid}
+					<a class="button" href="admin.php?raid-delAll" confirm="ACHTUNG! Es werden alle Events und Anmeldungen aus der Datenbank unwiederruflich gel&ouml;scht! Wollen sie wirklich die Aktion ausf&uuml;hren?">alle Events L&ouml;schen</a>
+					<a class="button" href="admin.php?raid-loescheEventZeit" confirm="Wollen Sie wirklich alle Event Zeiten L&ouml;schen?" remove="#eventZeitRemove td">alle Event Zeiten L&ouml;schen</a>
+				{/PERM}
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td width="50%" class="Cnorm">
+			
+			<!--{_array_zeiten_ %start% <br />_}-->
+		</td>
+		<td width="50%" class="Cnorm"></td>
+	</tr>
+	<tr>
+		<td width="50%" class="Cmite"></td>
+		<td width="50%" class="Cnorm"></td>
+	</tr>
+</table>
+
+
+
+<br/><br/>
+{EXPLODE "newEventForm"}
+<form id="standart" name="form" method="post" action="{PFAD}">
+	<table width="50%" border="0" cellspacing="1" cellpadding="2" class='border'>
+	  <tr class='Chead' align="center"> 
+		<td>Status</td>
+		<td>Leader</td>
+		<td>Gruppe</td>
+		<td>Dungeon</td>
+		<td>Zeit</td>
+	  </tr>
+	  
+	  <tr class='Cmite'> 
+		<td align="center">
+			<select name="statusmsg" size="8">
+				{_array_status_<option value="%id%">%statusmsg%</option>_}
+			</select>
+		</td>
+		<td align="center">
+			<select name="leader" size="8">
+				{_array_leader_<option value="%id%">%name%</option>_}
+			</select></td>
+		<td align="center">
+			<select name="gruppen" size="8">
+				{_array_gruppen_<option value="%id%">%gruppen%</option>_}
+			</select>
+		</td>
+		<td align="center">
+			<select name="inzen" size="8">
+				{_array_inzen_<option value="%id%">%name%</option> _}
+			 </select>
+		</td>
+		<td align="center">
+			<select name="time" size="8">
+				{_array_time_<option value="%id%" tooltip="%time%">%info%</option> _}
+			 </select>
+		</td>
+	  </tr>
+	  <tr class='Cnorm'> 
+		<td colspan="4" align="left">
+		  <span id="radio">
+		    <input id="radio1" type="radio" name="zyklus" value="0" selected="selected" /><label for="radio1">Einmalig</label>
+		    <input id="radio2" type="radio" name="zyklus" value="1"/><label for="radio2">T&auml;glich</label>
+		    <input id="radio3" type="radio" name="zyklus" value="2"/><label for="radio3">W&ouml;chentlich</label>
+	      </span>
+		  <span id="vonbis" style="display: none;">Vom </span><input id="datepicker" name="startdate" value="{startdate}" maxlength="10" size="12" />
+		  <span id="vonbis" style="display: none;"> bis zum <input id="datepicker2" name="enddate" value="" maxlength="10" size="12" /></span> <em>*</em>
+		</td>
+		<td colspan="2" align="center">
+			<input size="17" name="treff" type="text" value="{treff}" onblur="if (value == '') {value = 'Treffpunkt'}" onfocus="if (value == 'Treffpunkt') {value = ''}">
+		</td>
+	  </tr>
+	  <tr class='Cdark'> 
+		<td id="removeCode" colspan="6" style="padding-top: 6px;" align="center">{__BBCodeButtons__}</td>
+	  </tr>
+	  <tr class='Cnorm'>
+		<td colspan="6"><textarea name="txt" cols="110" rows="8" id="txt">{txt}</textarea></td>
+	  </tr>
+	  <tr class='Cdark'> 
+		<td colspan="6" align="center">
+		  <input type="submit" name="Submit" value="{button}">
+		  <input type="reset" name="button" id="button" value="Zur&uuml;cksetzen" /></td>
+	  </tr>
+	</table>
+</form>
+{EXPLODE "editEventForm"}
+<form id="standart" name="form" method="post" action="{PFAD}">
+	<table width="50%" border="0" cellspacing="1" cellpadding="2" class='border'>
+	  <tr class='Chead' align="center"> 
+		<td>Status</td>
+		<td>Leader</td>
+		<td>Gruppe</td>
+		<td>Dungeon</td>
+		<td>Zeit</td>
+	  </tr>
+	  
+	  <tr class='Cmite'> 
+		<td align="center">
+			<select name="statusmsg" size="8">
+				{_array_status_<option value="%id%" %select%>%statusmsg%</option>_}
+			</select>
+		</td>
+		<td align="center">
+			<select name="leader" size="8">
+				{_array_leader_<option value="%id%" %select%>%name%</option>_}
+			</select></td>
+		<td align="center">
+			<select name="gruppen" size="8">
+				{_array_gruppen_<option value="%id%" %select%>%gruppen%</option>_}
+			</select>
+		</td>
+		<td align="center">
+			<select name="inzen" size="8">
+				{_array_inzen_<option value="%id%" %select%>%name%</option> _}
+			 </select>
+		</td>
+		<td align="center">
+			<select name="time" size="8">
+				{_array_time_<option value="%id%"  %select% tooltip="%time%">%info%</option> _}
+			 </select>
+		</td>
+	  </tr>
+	  <tr class='Cnorm'> 
+		<td colspan="4" align="left">
+		  <input id="datepicker" name="startdate" value="{startdate}" maxlength="10" size="12" />
+		</td>
+		<td colspan="2" align="center">
+			<input size="17" name="treff" type="text" value="{treff}" onblur="if (value == '') {value = 'Treffpunkt'}" onfocus="if (value == 'Treffpunkt') {value = ''}">
+		</td>
+	  </tr>
+	  <tr class='Cdark'> 
+		<td id="removeCode" colspan="6" style="padding-top: 6px;" align="center">{__BBCodeButtons__}</td>
+	  </tr>
+	  <tr class='Cnorm'>
+		<td colspan="6"><textarea name="txt" cols="110" rows="8" id="txt">{txt}</textarea></td>
+	  </tr>
+	  <tr class='Cdark'> 
+		<td colspan="6" align="center">
+		  <input type="submit" name="Submit" value="{button}">
+		  <input type="reset" name="button" id="button" value="Zur&uuml;cksetzen" />	    </td>
+	  </tr>
+	</table>
+</form>
+{EXPLODE "kalenderInhalt"}
+<table id="eventlist{id}" width="100%" border="0" cellspacing="1" cellpadding="2" class='border kalenderInhalt' style="margin-top: 1px;">
+	<tr>
+		<th class="Cdark" align="center" style="color: {color};">{anmeld}/{grpsize} {inzen}</th>
+	</tr>
+	<tr>
+		<td class="Cnorm" align="center"><b>{gruppen}</b><br />{inv}, Lead: {leader}</td>
+	</tr>
+	<tr id="kalenderAction" style="display: none;">
+		<td class="Cnorm" align="right">{edit} {del}</td>
+	</tr>
+</table>

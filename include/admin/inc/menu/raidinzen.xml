@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<menu>
+
+  <list title="Zurück zum">
+  
+    <modul>
+	  <title>Raidplaner</title>
+	  <url>admin.php?raid</url>
+	</modul>
+
+  </list>
+
+  <list title="Wichtige Raidplaner einstellungen">
+  
+    <modul>
+	  <title>Gruppen</title>
+	  <url>admin.php?raidgruppen</url>
+	</modul>
+	
+	<modul>
+	  <title>Instanzen</title>
+	  <url>admin.php?raidinzen</url>
+	</modul>
+	
+	<modul>
+	  <title>Zeiten</title>
+	  <url>admin.php?raidzeiten</url>
+	</modul>
+	
+  </list>
+  
+</menu>
