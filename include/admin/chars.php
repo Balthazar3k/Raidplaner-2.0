@@ -45,15 +45,34 @@ switch($menu->get(1)){
 		if( !permission("editCharakter") ){ $raid->status(false, 'noperm', 'exit'); }
 		
 		$uid = $menu->get(2);
-		$res = simpleArrayFromQuery("SELECT id FROM prefix_modules WHERE menu IN('Raidplaner', 'RaidPermission')");
-		$raid->status(db_query("DELETE FROM prefix_modulerights WHERE uid='".$uid."' AND mid IN(".implode(", ", $res ).");"), NULL, NULL, __LINE__);
+		
+		## Löschen der Rechte!
+		$resModules = simpleArrayFromQuery("SELECT id FROM prefix_modules WHERE menu='Raidplaner'");
+		$resRechte = simpleArrayFromQuery("SELECT id FROM prefix_raid_rechte");
+		
+		$sqlStatus = array();
+		$sqlStatus[] = db_query("DELETE FROM prefix_modulerights WHERE uid='".$uid."' AND mid IN(".implode(", ", $resModules ).");");
+		$sqlStatus[] = db_query("DELETE FROM prefix_raid_userrechte WHERE uid='".$uid."' AND mid IN(".implode(", ", $resRechte ).");");
+		
+		$aTable = array(
+			'Permissions' => 'prefix_raid_userrechte',
+			'Raidplaner' => 'prefix_modulerights'
+		);
 		
 		if( isset( $_POST['mid'] ) ){
-			foreach( $_POST['mid'] as $key => $value ){
-				if( !empty( $uid ) && !empty( $value ) ){
-					$raid->insert("prefix_modulerights", array('uid' => $uid, 'mid' => $value ), 'uid:i', 'mid:i');
+			foreach( $_POST['mid'] as $rechte => $arr ){
+				foreach( $arr as $k => $v ){
+					if( !empty( $uid ) && !empty( $v ) ){
+						$sqlStatus[] = $raid->insert($aTable[$rechte], array('uid' => $uid, 'mid' => $v ), 'uid:i', 'mid:i');
+					}
 				}
 			}
+		}
+		
+		if( !in_array(0, $sqlStatus) ){
+			$raid->status( true, 'changeRechte', 'exit');
+		}else{
+			$raid->status( false, 'changeRechte', 'exit');
 		}
 		
 		$raid->setStatus(true);
@@ -126,6 +145,28 @@ switch($menu->get(1)){
 		
 		arrPrint(__LINE__, $charakter);
 		
+		$moduleRechteSQL = "
+			(SELECT
+				id, name, menu, pos,
+					IF( prefix_modulerights.mid != 'NULL', 'checked=\"checked\"', '') AS checked
+			FROM prefix_modules
+				LEFT JOIN prefix_modulerights ON prefix_modulerights.mid=prefix_modules.id AND prefix_modulerights.uid=".$charakter['uid']."
+			WHERE
+				prefix_modules.menu='Raidplaner')
+
+			UNION
+
+			(SELECT
+				id, name, menu, pos,
+					IF( prefix_raid_userrechte.mid != 'NULL', 'checked=\"checked\"', '') AS checked
+			FROM prefix_raid_rechte
+				LEFT JOIN prefix_raid_userrechte ON prefix_raid_userrechte.mid=prefix_raid_rechte.id AND prefix_raid_userrechte.uid=".$charakter['uid']."
+			WHERE
+				prefix_raid_rechte.menu='Permissions')
+					
+			ORDER BY pos ASC
+		";
+		
 		require_once('include/includes/class/iSmarty.php');
 		$smarty = new iSmarty();
 		$smarty->assign('charakter', $charakter);
@@ -134,14 +175,7 @@ switch($menu->get(1)){
 		$smarty->assign("rassen", simpleArrayFromQuery("SELECT id, rassen FROM prefix_raid_rassen WHERE " . faction()));
 		$smarty->assign("klassen", simpleArrayFromQuery("SELECT id, klassen FROM prefix_raid_klassen"));
 		$smarty->assign("spz", $raid->getSpz($charakter['klassen']));
-		$smarty->assign("modules", allRowsFromQuery("
-			SELECT a.id, a.name, a.menu,
-			IF( b.mid != 'NULL', 'checked=\"checked\"', '') AS checked
-			FROM prefix_modules AS a
-			LEFT JOIN prefix_modulerights AS b ON b.mid = a.id AND b.uid=".$charakter['uid']."
-			WHERE a.menu IN('Raidplaner', 'RaidPermission') 
-			ORDER BY a.pos ASC
-		"));
+		$smarty->assign("modules", allRowsFromQuery($moduleRechteSQL));
 		
 		defined ('main') or die ( 'no direct access' );
 		defined ('admin') or die ( 'only admin access' );

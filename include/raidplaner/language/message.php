@@ -21,6 +21,9 @@ $raidMsg['save&sort'][1] = "Eintr&auml;ge wurden ge&auml;ndert & Sortiert!";
 $raidMsg['changeRecht'][0] = "Recht konnte <b>nicht</b> ge&auml;ndert werden!";
 $raidMsg['changeRecht'][1] = "Recht wurde erfolgreich ge&auml;ndert!";
 
+$raidMsg['changeRechte'][0] = "Rechte konnten <b>nicht</b> ge&auml;ndert werden!";
+$raidMsg['changeRechte'][1] = "Rechte wurden ge&auml;ndert!";
+
 $raidMsg['changeRang'][0] = "Recht konnte <b>nicht</b> ge&auml;ndert werden!";
 $raidMsg['changeRang'][1] = "Recht wurde erfolgreich ge&auml;ndert!";
 

@@ -73,8 +73,8 @@
       <tr class="Chead">
         <td colspan="2">Seitenrechte im Adminbereich</td>
       </tr>
-	  {foreach $modules as $i}<tr class="Cnorm {$i.menu}">
-        <td align="right"><input type="checkbox" name="mid[]" value="{$i.id}" {$i.checked}></td>
+	  {foreach $modules as $i}<tr class="{if $i.menu == 'Raidplaner'}Cmite{else}Cnorm{/if}">
+        <td align="right"><input type="checkbox" name="mid[{$i.menu}][]" value="{$i.id}" {$i.checked}></td>
         <td>{$i.name}</td>
       </tr>{/foreach}
 	  <tr class="Cdark">
