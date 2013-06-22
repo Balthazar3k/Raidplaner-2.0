@@ -1,0 +1,60 @@
+<table id="standart" width="100%" border="0" cellspacing="1" cellpadding="2" class="border">
+  <tr class="Chead"> 
+    <td width="20%" align="center">Charaktere</td>
+    <td width="20%" align="center">{CFG=maxlevel}iger</td>
+    <td width="20%" align="center">Main Charaktere</td>
+    <td width="20%" align="center">Bewerber</td>
+	<td width="20%" align="center">Deine Charaktere</td>
+  </tr>
+  <tr class="Cdark"> 
+    <td align="center">{COUNT_CHARS}</td>
+    <td align="center">{COUNT_LEVEL}</td>
+    <td align="center">{COUNT_MAINS}</td>
+    <td align="center" class="Cnorm">{COUNT_BEWERBER}</td>
+    <td align="center">{COUNT_EIGENE}</td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td colspan="2" nowrap>
+      <form id="form2" name="form2" method="post" action="index.php?chars">
+        <div align="right">Charakter Name:
+          <input type="text" name="search" id="search" />
+          <input type="submit" name="button" id="button" value="Suchen" />
+        </div>
+    </form>    </td>
+  </tr>
+  <tr>
+    <td nowrap>{USER}</td>
+    <td align="right" valign="middle" nowrap="nowrap">
+		<a href="index.php?chars" tooltip="filter zur&uuml;cksetzen">
+			<img width="23" src="include/raidplaner/images/icons/red.png" border="0">
+		</a>
+		
+		{list_klassen}</td>
+  </tr>
+</table>
+{EXPLODE}
+</div><div class="charListTitle" style="background-color: {color};" align="center"><div slide="{klass_name}" class="shadoww" style="padding-bottom: 3px;">{klass_name}</div>
+{EXPLODE}
+<div id="charakter{id}" class="charList {klassen}">
+	<div class="nr1">
+		<b>&#8250; {rechtname} &#8249;</b><br />
+		<span style="color: {color};">
+			{rassen} {klassen}<br />
+			{s1}<br />
+			{s2}
+		</span>
+	</div>
+	<div class="nr2"><img src="{avatar}" style="border-left: 1px solid {color}; border-right: 1px solid {color};"/></div>
+	<div class="nr3" href="index.php?chars-show-{id}">{name} {level}</div>
+	<div class="nr4">
+			{_if_{owner}=='1'}{PERM:updateCharakter}<a href="index.php?chars-updateBattleNet" post="id={id}"><img src="include/raidplaner/images/icons/refresh.png" /></a>{/PERM}{/_endif}
+			{_if_{owner}=='1'}{PERM:editCharakter}<a href="index.php?chars-edit-{id}" fancybox="inline"><img src="include/raidplaner/images/icons/smart.png" /></a>{/PERM}{/_endif}
+			{PERM:removeCharakter}<a href="index.php?chars-del-{id}" confirm="{name} wirklich L&ouml;schen?" remove="#charakter{id}"><img src="include/raidplaner/images/icons/cancel.png" /></a>{/PERM}
+			<a href="{CFG=arsenalurl}{realm}/{name}/simple" target="_blank" tooltip="Arsenal-Link"><img src="include/raidplaner/images/icons/forward.png" /></a>
+	</div>
+	<br style="clear: both;" />
+</div>
+{EXPLODE}
