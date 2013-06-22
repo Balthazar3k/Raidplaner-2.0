@@ -1,14 +1,16 @@
 Thumbs.db
-
 .htaccess
+*contentslider*
 include/designs/*
 include/cache/*
 include/backup/*
 include/images/*
 update/*
 include/boxes/autoLogin.php
+include/includes/config.php
 
-
+include/includes/class/passwdcrypt.php
+include/includes/js/global/jquery-ui-1.8.21.custom.min.js
 admin.php
 changelog.txt
 include/admin/admin.php
@@ -20,6 +22,7 @@ include/admin/bbcode.php
 include/admin/captcha.php
 include/admin/checkconf.php
 include/admin/contact.php
+include/admin/contentslider.php
 include/admin/credits.php
 include/admin/design/dropdowntabs.js
 include/admin/design/img/2px.png
@@ -99,6 +102,7 @@ include/admin/templates/bbcode/design.htm
 include/admin/templates/captcha.htm
 include/admin/templates/checkconf.htm
 include/admin/templates/contact.htm
+include/admin/templates/contentslider.htm
 include/admin/templates/credits.htm
 include/admin/templates/forum/eforum.htm
 include/admin/templates/forum/forum.htm
@@ -160,7 +164,6 @@ include/admin/vote.php
 include/admin/wars.php
 include/backup/backup.class.php
 include/backup/bigdump.php
-include/boxes/admin/2.php
 include/boxes/admin/adminhmenu.php
 include/boxes/admin/adminlogin.php
 include/boxes/admin/adminmenu.php
@@ -169,6 +172,7 @@ include/boxes/admin/admintabs.php
 include/boxes/admin/systemcheck.php
 include/boxes/allianz.php
 include/boxes/calender.php
+include/boxes/contentslider.php
 include/boxes/designs.php
 include/boxes/geburtstag.php
 include/boxes/kommentare.php
@@ -260,6 +264,11 @@ include/designs/ilchClan12/zusatz/iepngfix.htc
 include/images/avatars/maennlich.jpg
 include/images/avatars/weiblich.jpg
 include/images/avatars/wurstegal.jpg
+include/images/contentslider/1_mkygre.jpg
+include/images/contentslider/2_sigdl7.jpg
+include/images/contentslider/3_yjsdzq.jpg
+include/images/contentslider/4_wwnahq.jpg
+include/images/contentslider/5_4psxyq.jpg
 include/images/flags/Albania.gif
 include/images/flags/Armenia.gif
 include/images/flags/Austria.gif
@@ -330,6 +339,7 @@ include/images/icons/admin/box_header.png
 include/images/icons/admin/captcha.png
 include/images/icons/admin/checkconf.png
 include/images/icons/admin/contact.png
+include/images/icons/admin/contentslider.png
 include/images/icons/admin/credits.png
 include/images/icons/admin/forum.png
 include/images/icons/admin/gallery.png
@@ -474,6 +484,7 @@ include/images/icons/forum-privmsg.png
 include/images/icons/forum.png
 include/images/icons/gallery.png
 include/images/icons/home.png
+include/images/icons/image.png
 include/images/icons/insert_table.gif
 include/images/icons/jep.gif
 include/images/icons/kalender.png
@@ -589,14 +600,17 @@ include/includes/class/design.php
 include/includes/class/highlight/css.php
 include/includes/class/highlight/html.php
 include/includes/class/iSmarty.php
+include/includes/class/ilch/database/mysql.php
+include/includes/class/ilch/registry.php
 include/includes/class/menu.php
-include/includes/class/passwdcrypt.php
 include/includes/class/profilefield_registry.php
 include/includes/class/profilefield_types/AbstractProfileFieldType.php
 include/includes/class/profilefield_types/profilefield_type_1.php
 include/includes/class/profilefield_types/profilefield_type_4.php
 include/includes/class/profilefield_types/profilefield_type_5.php
+include/includes/class/pwcrypt.php
 include/includes/class/tpl.php
+include/includes/css/contentslider/style.css
 include/includes/css/fancybox/blank.gif
 include/includes/css/fancybox/fancy_close.png
 include/includes/css/fancybox/fancy_loading.png
@@ -638,6 +652,7 @@ include/includes/css/jquery/templates/cupertino/images/ui-icons_3d80b3_256x240.p
 include/includes/css/jquery/templates/cupertino/images/ui-icons_72a7cf_256x240.png
 include/includes/css/jquery/templates/cupertino/images/ui-icons_ffffff_256x240.png
 include/includes/css/jquery/templates/cupertino/jquery-ui.css
+include/includes/css/jquery/templates/cupertino/jquery.ui.theme.css
 include/includes/css/jquery/templates/redmond/images/ui-bg_flat_0_aaaaaa_40x100.png
 include/includes/css/jquery/templates/redmond/images/ui-bg_flat_55_fbec88_40x100.png
 include/includes/css/jquery/templates/redmond/images/ui-bg_glass_75_d0e5f5_1x400.png
@@ -653,6 +668,8 @@ include/includes/css/jquery/templates/redmond/images/ui-icons_6da8d5_256x240.png
 include/includes/css/jquery/templates/redmond/images/ui-icons_cd0a0a_256x240.png
 include/includes/css/jquery/templates/redmond/images/ui-icons_d8e7f3_256x240.png
 include/includes/css/jquery/templates/redmond/images/ui-icons_f9bd01_256x240.png
+include/includes/css/jquery/templates/redmond/jquery-ui.css
+include/includes/css/jquery/templates/redmond/jquery.ui.theme.css
 include/includes/css/jquery/templates/redmond/jquery-ui-1.8.21.custom.css
 include/includes/func/allg.php
 include/includes/func/bbcode.php
@@ -675,6 +692,7 @@ include/includes/func/user.php
 include/includes/func/warsys.php
 include/includes/js/JSCookMenu.js
 include/includes/js/bbcode.js
+include/includes/js/contentslider/slider.js
 include/includes/js/dropdowntabs.js
 include/includes/js/editor/deutsch.js
 include/includes/js/editor/whizzywig.js
@@ -699,7 +717,7 @@ include/includes/js/forms/wars_last.js
 include/includes/js/global/BBCodeGlobal.js
 include/includes/js/global/ilch.js
 include/includes/js/global/jquery-1.7.2.min.js
-include/includes/js/global/jquery-ui-1.8.21.custom.min.js
+include/includes/js/global/jquery-ui-1.10.0.min.js
 include/includes/js/global/jquery.fancybox-1.3.4.pack.js
 include/includes/js/interface.js
 include/includes/js/jquery/auto-complete.js
@@ -711,10 +729,13 @@ include/includes/js/search.js
 include/includes/js/shoutbox.js
 include/includes/lang/de/boxes/login.php
 include/includes/lang/de/contents/forum.php
+include/includes/lang/de/contents/gbook.php
 include/includes/lang/de/contents/user.php
 include/includes/lang/de/example.php
 include/includes/lang/de/global.php
+include/includes/lang/en/boxes/login.php
 include/includes/lang/en/contents/forum.php
+include/includes/lang/en/contents/gbook.php
 include/includes/lang/en/contents/user.php
 include/includes/lang/en/example.php
 include/includes/lang/en/global.php
@@ -891,7 +912,8 @@ include/templates/forum/showtopic.htm
 include/templates/gallery.htm
 include/templates/gallery_show.htm
 include/templates/gallery_showcat.htm
-include/templates/gbook.htm
+include/templates/gbook/insert.htm
+include/templates/gbook/show.htm
 include/templates/history.htm
 include/templates/joinus.htm
 include/templates/kalender.htm
@@ -938,3 +960,8 @@ update/update_11_12.sql
 update/updates/240.php
 update/updates/241.php
 update/updates/242.php
+update/updates/243.php
+update/updates/244.php
+update/updates/245.php
+update/updates/246.php
+update/updates/247.php
