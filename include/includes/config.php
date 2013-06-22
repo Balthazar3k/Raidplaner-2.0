@@ -1,1 +1,3 @@
-1
+<?php
+  ## cfg fehler
+?>
