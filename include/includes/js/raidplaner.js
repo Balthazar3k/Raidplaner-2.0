@@ -1,5 +1,5 @@
 (function(a){function d(b){var c=b||window.event,d=[].slice.call(arguments,1),e=0,f=!0,g=0,h=0;return b=a.event.fix(c),b.type="mousewheel",c.wheelDelta&&(e=c.wheelDelta/120),c.detail&&(e=-c.detail/3),h=e,c.axis!==undefined&&c.axis===c.HORIZONTAL_AXIS&&(h=0,g=-1*e),c.wheelDeltaY!==undefined&&(h=c.wheelDeltaY/120),c.wheelDeltaX!==undefined&&(g=-1*c.wheelDeltaX/120),d.unshift(b,e,g,h),(a.event.dispatch||a.event.handle).apply(this,d)}var b=["DOMMouseScroll","mousewheel"];if(a.event.fixHooks)for(var c=b.length;c;)a.event.fixHooks[b[--c]]=a.event.mouseHooks;a.event.special.mousewheel={setup:function(){if(this.addEventListener)for(var a=b.length;a;)this.addEventListener(b[--a],d,!1);else this.onmousewheel=d},teardown:function(){if(this.removeEventListener)for(var a=b.length;a;)this.removeEventListener(b[--a],d,!1);else this.onmousewheel=null}},a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})})(jQuery)
-
+//location.reload()
 // Seiten Manipulation
 $(document).ready( function() {
 
@@ -93,6 +93,7 @@ $(document).ready( function() {
 	$("select[goto]").live("change", function(){
 		var val = '';
 		var url = $(this).attr('goto');
+		var reload = $(this).attr('reload');
 		if( url.indexOf('::') != -1 ){
 			var get = url.split('::');
 			url = get[0];
@@ -102,7 +103,7 @@ $(document).ready( function() {
 		val += '&val=' + $(this).val();
 		console.log(val);
 		$.post( url, val, function(data){
-			$(this).dialogMsg( data, 1500, true);
+			$(this).dialogMsg( data, 3000, true);
 		});
 	});
 	

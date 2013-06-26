@@ -165,6 +165,7 @@ form#apply label.error { display: none; }
 
 .raidrangCharakter {
 	float: left;
+	border-radius: 5px;
 }
 
 .raidrangCharakter span {
@@ -213,6 +214,8 @@ form#apply label.error { display: none; }
 }
 
 .status div{
+	font-size: 14px;
+	font-family: Ubuntu;
 	min-height: 25px;
 	line-height: 25px;
 	margin-bottom: 3px;
@@ -274,4 +277,19 @@ form#apply label.error { display: none; }
 .ui-combobox-input {
 	margin: 0;
 	padding: 0.3em;
+}
+/*********************
+ *	Admin Raidrang   *
+ ********************/
+.rang-name{
+	width: 165px; 
+	font-weight: bold; 
+	font-size: 16px; 
+	text-align: center; 
+	font-family: Ubuntu;
+}
+.rang-rechte-name {
+	margin-bottom: 2px; 
+	font-family: Ubuntu; 
+	font-size: 13px; 
 }

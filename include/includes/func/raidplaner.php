@@ -9,7 +9,7 @@ $status = new status();
 $raid = new raidplaner();
 
 function copyright(){
-	echo "<br><div align='center' class='smallfont'>[ Raidplaner v1.3 &copy; by <a href='http://Balthazar3k.funpic.de' target='_blank'>b3k</a> ]</div>";
+	echo "<br><div align='center' class='smallfont'>[ Raidplaner v1.4 &copy; by <a href='http://Balthazar3k.funpic.de' target='_blank'>b3k</a> ]</div>";
 }
 
 ### RAIDPLANER HEADER
@@ -500,40 +500,6 @@ class status {
 	}
 }
 
-function ilch_setModuleRights($uid, $array = NULL){
-	global $raid;
-	
-	arrPrint(__FUNCTION__, $array);
-	
-	if( isset($_POST['setModuleRights']) )
-		$array = array_merge( $array, $_POST['setModuleRights'] );
-	
-	// Vorhandene Module Rechte Löschen
-	$res = simpleArrayFromQuery("SELECT id FROM prefix_modules WHERE menu IN('Raidplaner', 'RaidPermission')");
-	db_query("DELETE FROM prefix_modulerights WHERE uid='".$uid."' AND mid IN(".implode(", ", $res ).");");
-	
-	// Neue Modulrechte erstellen
-	$res = TRUE;
-	foreach( $array as $k => $v ){
-		
-		// Wenn ein Datenbankfehler auftritt Stopt er die Schleife
-		if( !$res )
-			break;
-		
-		$res = $raid->insert('prefix_modulerights', array('uid' => $uid, 'mid' => $v), 'uid:i', 'mid:i');
-	}
-	
-	return $res;
-}
-
-function ilch_updateConfig($schl, $wert, $typextra = NULL){
-	global $raid;
-	$nowMsg = array("BattleNetAccesses");
-	db_query("UPDATE prefix_config SET wert='".$wert."', typextra='".$typextra."' WHERE schl='".$schl."';");
-	if( !in_array( $schl, $nowMsg ) )
-		$raid->status(2, 'ilchcfg', 0);
-}
-
 function getArray( $sql ){
 	$i = 0;
 	$newArray = array();
@@ -560,6 +526,14 @@ function getAssocArray( $sql ){
 		$newArray[] = $row;
 		
 	return $newArray;
+}
+
+function ilch_updateConfig($schl, $wert, $typextra = NULL){
+	global $raid;
+	$nowMsg = array("BattleNetAccesses");
+	db_query("UPDATE prefix_config SET wert='".$wert."', typextra='".$typextra."' WHERE schl='".$schl."';");
+	if( !in_array( $schl, $nowMsg ) )
+		$raid->status(2, 'ilchcfg', 0);
 }
 
 function ilch_getRaidConfigLink(){

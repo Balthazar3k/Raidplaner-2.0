@@ -24,8 +24,17 @@ $raidMsg['changeRecht'][1] = "Recht wurde erfolgreich ge&auml;ndert!";
 $raidMsg['changeRechte'][0] = "Rechte konnten <b>nicht</b> ge&auml;ndert werden!";
 $raidMsg['changeRechte'][1] = "Rechte wurden ge&auml;ndert!";
 
-$raidMsg['changeRang'][0] = "Recht konnte <b>nicht</b> ge&auml;ndert werden!";
-$raidMsg['changeRang'][1] = "Recht wurde erfolgreich ge&auml;ndert!";
+$raidMsg['changeRang'][0] = "Der Gilden Rang konnte <b>nicht</b> ge&auml;ndert werden!";
+$raidMsg['changeRang'][1] = "Der Gilden Rang wurde erfolgreich ge&auml;ndert!";
+
+$raidMsg['updateRang'][0] = "R&auml;nge konnten <b>nicht</b> ge&auml;ndert werden!";
+$raidMsg['updateRang'][1] = "R&auml;nge wurden erfolgreich ge&auml;ndert!";
+
+$raidMsg['removeModuleRights'][0] = "Rechte konnten <b>nicht</b> entzogen werden!";
+$raidMsg['removeModuleRights'][1] = "Rechte wurden entzogen!";
+
+$raidMsg['setModuleRights'][0] = "Rechte konnten <b>nicht</b> Zugeteilt werden!";
+$raidMsg['setModuleRights'][1] = "Rechte wurden neu Zugeteilt!";
 
 $raidMsg['changeUser'][0] = "dieser Charakter konnte dem User nicht zugeteilt werden!";
 $raidMsg['changeUser'][1] = "Charakter wurde erfolgreich dem User zugeteilt";

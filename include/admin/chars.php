@@ -7,7 +7,6 @@ switch($menu->get(1)){
 	case "removeAll":
 		if(!permission('removeCharakter')){ $raid->status(false, 'noperm', 'exit'); }
 		$charaktere = getAssocArray('SELECT id FROM prefix_raid_charaktere');
-		arrPrint(__LINE__, $charaktere);
 		foreach( $charaktere as $c )
 			$raid->removeCharakter( $c['id'] );
 		
@@ -20,28 +19,39 @@ switch($menu->get(1)){
 	
 	case "changeUser": #ajaxAction
 		if(!permission('editCharakter')){ $raid->status(false, 'noperm', 'exit'); }
-		$raid->status($raid->update('prefix_raid_charaktere', 'id->id:i', 'val:user:i'), 'changeUser', 3);
-		$raid->setLastStatus(true);
+		
+		if( isset($_POST['uid']) &&  !empty($_POST['uid']) ){
+			# Wenn der Charakter noch keine User hat, können ihm auch keine Rechte entzogen werden.
+			$raid->removeModuleRights(escape($_POST['olduid'], 'integer'));										#Modulrechte vom Alten user entfernen!
+		}
+		
+		$raid->status($raid->update('prefix_raid_charaktere', 'id->id:i', 'val:user:i', 'olduid:strip', 'rang:strip'), 'changeUser', 3);
+		$raid->setModuleRights(escape($_POST['val'], 'integer') ,escape($_POST['rang'], 'integer'));			#Modulrechte dem neuem User zuteilen!
+		arrPrint(__LINE__, $_POST );
+		$raid->setStatus(true);
 	break;
 	
 	case "changeRank": #ajaxAction
 		if(!permission('editCharakter')){ $raid->status(false, 'noperm', 'exit'); }
-		$raid->status(db_query("UPDATE prefix_raid_charaktere SET rank='".escape($_POST['rank'], 'integer')."' WHERE id='".escape($menu->get(2), 'integer')."'"), 'changeRang', 3);
-		$raid->setLastStatus(true);
+		$resStatus = array();
+		$raid->changeModuleRights(escape($menu->get(3), 'integer') ,escape($_POST['rank'], 'integer'));
+		$resStatus[] = db_query("UPDATE prefix_raid_charaktere SET rank='".escape($_POST['rank'], 'integer')."' WHERE id='".escape($menu->get(2), 'integer')."'");
+		$raid->status(( in_array( 0, $resStatus) ? FALSE : TRUE ), 'changeRang', 3);
+		$raid->setStatus(true);
 	break;
 	
 	case "edit":
 		if(!permission('editCharakter')){ $raid->status(false, 'noperm', 'exit'); }
 		$design = new design ( 'Charaktere', '&Uuml;bersicht', 2 );
 		$design->header();
-		
+		$raid->changeModuleRights($_POST['user'], $_POST['rank']);
 		$raid->update('prefix_raid_charaktere', 'id->id:i', 'user:i', 'name:s', 'level:i', 'rassen:i', 'klassen:i', 's1:s', 's2:s', 'teamspeak:i', 'realm:s', 'rank:i', 'recht:strip' );
-		arrPrint(__LINE__, $raid->status );
 		wd("admin.php?chars-details-" . $_POST['id'], $raid->getLastStatus(), 3);
 		$design->footer();
 	break;
 	
 	case "modulerights": #ajaxAction
+		## Manuelle Modulrechte einstellung
 		if( !permission("editCharakter") ){ $raid->status(false, 'noperm', 'exit'); }
 		
 		$uid = $menu->get(2);

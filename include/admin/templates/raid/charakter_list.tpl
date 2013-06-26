@@ -64,7 +64,7 @@
 		{if $i.gebdatum != ''}[{$i.gebdatum|age}] {else}[00] {/if}
 		
 		{if $i.uid == 0 }
-			<select id="combobox" name="changeUser" goto="admin.php?chars-changeUser::id={$i.id}">
+			<select id="combobox" name="changeUser" goto="admin.php?chars-changeUser::id={$i.id}&olduid={$i.uid}&rang={$i.rank}" reload="reload">
 				<option><b>nicht Zugewiesen!</b></option>
 				{html_options values=$user.id output=$user.name selected=$i.user}
 			</select>
@@ -73,8 +73,12 @@
 		{/if}
 	</td>
     <td width="1%">
-		{assign var='goto' value="goto:admin.php?chars-changeRank-{$i.id}"}
+	{if $i.uid != 0 }
+		{assign var='goto' value="goto:admin.php?chars-changeRank-{$i.id}-{$i.uid}"}
 		{html_options name={$goto} options=$rechte selected=$i.rank}
+	{else}
+		kein User, kein Rang
+	{/if}
 	</td>
     <td nowrap="nowrap" align="center" class="CharakterKlassenBackground" style="color: {$i.color}; font-weight: bold;">{$i.s1} {if $i.s2 != ''}/ {$i.s2}{/if}</td>
     <td nowrap="nowrap" tooltip="am: {$i.regist|date_format:'%d.%m.%Y'}">{$i.regist|ago}</td>

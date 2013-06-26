@@ -50,8 +50,50 @@ class raidplaner {
 	######
 	####
 	##
+	public function removeModuleRights($uid){
+		// Vorhandene Module Rechte Löschen
+		$resStatus = array();
+		
+		$res = simpleArrayFromQuery("SELECT id FROM prefix_modules WHERE menu='Raidplaner'");
+		$resStatus[] = db_query("DELETE FROM prefix_modulerights WHERE uid='".$uid."' AND mid IN(".implode(", ", $res ).");");
+		
+		$res = simpleArrayFromQuery("SELECT id FROM prefix_raid_rechte");
+		$resStatus[] = db_query("DELETE FROM prefix_raid_userrechte WHERE uid='".$uid."' AND mid IN(".implode(", ", $res ).");");
+		
+		$this->status(( in_array( 0, $resStatus) ? FALSE : TRUE ), 'removeModuleRights', 5);
+	}
 	
-	var $logFileName;
+	public function setModuleRights($uid, $rang){
+		$resStatus = array();
+		
+		// Neue Modulrechte erstellen
+		$aTable = array(
+				'Permissions' => 'prefix_raid_userrechte',
+				'Raidplaner' => 'prefix_modulerights'
+		);
+		
+		$res = db_query("SELECT rechte FROM prefix_raid_rang WHERE id='".$rang."' LIMIT 1;");
+		$row = db_fetch_assoc( $res );
+		$rechte = json_decode($row['rechte'], true);
+		
+		if( is_array( $rechte ) ){
+			foreach( $rechte as $table => $array ){			
+				foreach( $array as $v ){			
+					$resStatus[] = $this->insert($aTable[$table], array('uid' => $uid, 'mid' => $v), 'uid:i', 'mid:i');
+				}
+			}
+			
+			arrPrint(__FUNCTION__, $resStatus );
+			$lastStatus = ( in_array( 0, $resStatus) ? FALSE : TRUE );
+			$this->status($lastStatus, 'setModuleRights', 5);
+			return $lastStatus;
+		}
+	}
+	
+	public function changeModuleRights($uid, $rang){
+		$this->removeModuleRights($uid);
+		$this->setModuleRights($uid, $rang);
+	}
 	
 	private function checkRaidStatus(){
 		if( permission('editRaid') ){
@@ -70,7 +112,7 @@ class raidplaner {
 	}
 	
 	public function updateRangId(){
-		## Damit ränge immer durchgehend durch nummerriert sind sind und nicht 1, 2, 5 ergibt
+		## Damit ränge immer durchgehend durch nummerriert sind und nicht 1, 2, 5 ergibt
 		$array = simpleArrayFromQuery("SELECT id as oid FROM prefix_raid_rang ORDER BY id ASC");
 		foreach( $array as $id => $oid ){
 			@db_query("UPDATE prefix_raid_rang SET id='".$id."' WHERE id='".$oid."' LIMIT 1");
@@ -80,6 +122,26 @@ class raidplaner {
 		$extra = getArray('SELECT id AS `keys`, name AS `values` FROM prefix_raid_rang ORDER BY id ASC');
 		ilch_updateConfig('bewerberrang', count( $extra['keys'] )-1, json_encode($extra) );
 	}
+	
+	public function updateModuleRights(){
+		$stat = array();
+		$charaktere = $this->mainCharaktere();
+		foreach( $charaktere['user'] as $i => $uid )
+			$stat[] = $this->changeModuleRights($uid, $charaktere['rank'][$i]);
+		
+		return ( in_array( 0, $stat) ? FALSE : TRUE );
+	}
+	
+	
+	
+	##
+	####
+	######
+	# LOG METHODEN
+	######
+	####
+	##
+	var $logFileName;
 	
 	public function log(){
 		$this->logFileName = 'log/' . date('Y-m-d');
@@ -204,9 +266,7 @@ class raidplaner {
 		// $_POST['action'] damit er nicht rechte ändert wenn ein User gelöscht wird
 		if( $row['user'] != 0 && !isset($_POST['action']) && $_POST['action'] != 'deleteUser' ){ 
 			$mainCharakter = $this->mainCharakter($row['user']);
-			arrPrint(__FUNCTION__, $mainCharakter);
-			if( is_array($mainCharakter) )
-				ilch_setModuleRights($row['user'], json_decode($mainCharakter['rechte']));
+			$this->changeModuleRights($row['user'], $mainCharakter['rank']);
 		}
 		
 		$this->status(!in_array(0, $nr), 'removeCharakter', 3, $row);
@@ -241,8 +301,25 @@ class raidplaner {
 			$_SESSION['charrank'] = $mainCharakter['rank'];
 			$_SESSION['charklasse'] = $mainCharakter['klassen'];
 			$_SESSION['charzeiten'] = $mainCharakter['time'];
+			$this->sessionAuthmod($_SESSION['authid']);
 		}else{
 			$_SESSION['charzeiten'] = $_SESSION['charname'] = $_SESSION['charid'] = $_SESSION['charklasse'] = 0;
+		}
+	}
+	
+	private function sessionAuthmod( $uid ){
+		## Zusätzliche rechte in die Session aufnehmen
+		$res = db_query("
+			SELECT
+				b.url
+			FROM prefix_raid_userrechte AS a
+				LEFT JOIN prefix_raid_rechte AS b ON a.mid=b.id
+			WHERE
+				a.uid = '".$uid."'
+		");
+		
+		while( $row = db_fetch_assoc( $res ) ){
+			$_SESSION['authmod'][$row['url']] = true;
 		}
 	}
 	
@@ -372,7 +449,7 @@ class raidplaner {
 	}
 	
 	public function getStatus(){
-		arrPrint(__METHOD__, $this->status, $_POST, $_SESSION, $_SERVER );
+		//arrPrint(__METHOD__, $this->status, $_POST, $_SESSION, $_SERVER );
 		
 		require_once('include/includes/class/iSmarty.php');
 		$smarty = new iSmarty();
