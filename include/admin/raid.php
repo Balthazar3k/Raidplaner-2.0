@@ -3,10 +3,11 @@
 defined ('main') or die ( 'no direct access' );
 defined ('admin') or die ( 'only admin access' );
 
-//arrPrint( zyklus( 2, mktime(18, 00, 00, 10, 30, 2012), mktime(18, 00, 00, 12, 31, 2012) ) );
+require_once('include/includes/class/iSmarty.php');
+$smarty = new iSmarty();
 
-function zyklus( $option, $from, $to )
-{	$dates = array();
+function zyklus( $option, $from, $to ){
+	$dates = array();
 
 	$h = date("H", $from);
 	$i = date("i", $from);
@@ -14,11 +15,11 @@ function zyklus( $option, $from, $to )
 	$d = date("d", $from);
 	$y = date("Y", $from);
 	
-	switch($option)
-	{	case 0: //Einmalig
+	switch($option){
+		case 0: // Einmalig
 				$dates[] = $from; return $dates; break;
 		
-		case 1: //Täglich
+		case 1: // Täglich
 				$days = floor(($to-$from)/(86400));
 				for( $x = 0; $x < $days+1; $x++)
 				{	$dates[] = mktime($h, $i, 0, $m, $d+($x), $y);
@@ -44,16 +45,6 @@ switch($menu->get(1)){
 	case "add":
 		if( $_SESSION['authright'] >= $allgAr['addchar'] ) { exit("Sie habe nicht die N&ouml;tigen rechte!"); }
 		
-		$stat = true;
-		$stat = ( !isset( $_POST['statusmsg'] ) ? $status->f("Bitte w&auml;len sie einen Status aus!") : $stat );
-		$stat = ( !isset( $_POST['leader'] ) ? $status->f("Bitte w&auml;len sie einen Leader aus") : $stat );
-		$stat = ( !isset( $_POST['gruppen'] ) ? $status->f("Bitte w&auml;len sie einen Gruppe aus") : $stat );
-		$stat = ( !isset( $_POST['inzen'] ) ? $status->f("Bitte w&auml;len sie einen Dungeon aus") : $stat );
-		$stat = ( !isset( $_POST['time'] ) ? $status->f("Bitte w&auml;len sie einen Zeit aus") : $stat );
-		$stat = ( !isset( $_POST['zyklus'] ) ? $status->f("Bitte w&auml;len sie einen Zyklus aus") : $stat );
-		$stat = ( empty( $_POST['startdate'] ) ? $status->f("Bitte geben sie einen Datum an") : $stat );
-		if( !$stat ){ $status->close(); }
-		
 		$res = db_query("SELECT start, begin, ende, sperre FROM prefix_raid_zeit WHERE id=".$_POST['time'].";");
 		$zeit = db_fetch_assoc( $res );
 		
@@ -62,6 +53,9 @@ switch($menu->get(1)){
 		list( $estd, $emin ) = explode(":", $zeit['ende'] );
 		
 		list($tag, $monat, $jahr ) = explode( ".", $_POST['startdate'] );
+		$tag = escape($tag, 'integer');
+		$monat = escape($monat, 'integer');
+		$jahr = escape($jahr, 'integer');
 		$startDate = mktime( $istd, $imin, 0, $monat, $tag, $jahr); 
 		$pullDate = mktime( $pstd, $pmin, 0, $monat, $tag, $jahr);
 		$endDate = mktime( $estd, $emin, 0, $monat, $tag, $jahr);
@@ -77,17 +71,16 @@ switch($menu->get(1)){
 		
 		$erstellt = time();
 		
-		
+		$sqlStatus = array();
 		foreach( $inv as $k => $start )
 		{	//echo DateFormat("D d.m.Y H:i", $start) . "<br />";
-			db_query("INSERT INTO `prefix_raid_raid` (`id` ,`statusmsg` ,`leader` ,`gruppen` ,`inzen` ,`treff`,`time` ,`inv` ,`pull` ,`ende`, `invsperre`, `txt`, `erstellt`, `cid`, `multi`,`von`,`bis` )
-			VALUES ( NULL , '".
+			$sqlStatus[] = db_query("INSERT INTO `prefix_raid_raid` (`statusmsg` ,`leader` ,`gruppen` ,`inzen` ,`time` ,`inv` ,`pull` ,`ende`, `invsperre`, `txt`, `erstellt`, `cid`, `multi`,`von`,`bis` )
+			VALUES ('".
 			escape($_POST['statusmsg'], "integer")."', '".
 			escape($_POST['leader'], 	"integer")."', '".
 			escape($_POST['gruppen'], 	"integer")."', '".
 			escape($_POST['inzen'], 	"integer")."', '".
-			escape($_POST['treff'], 	"string")."', '".
-			escape($_POST['time'], 	"interger")."', '".
+			escape($_POST['time'], 		"interger")."', '".
 			escape($start, 				"integer")."', '".
 			escape($pull[$k], 			"integer")."', '".
 			escape($end[$k], 			"integer")."', '".
@@ -100,8 +93,8 @@ switch($menu->get(1)){
 			escape($_POST['enddate'], 	"string") ."');");
 		}
 		
-		$status->f("");
-		exit('Neuer eintrag war erfolgreich!');
+		$raid->status(!in_array(0, $sqlStatus), 'createEvent', 5, array('count' => count($sqlStatus)));
+		$raid->setStatus(true);
 	break;
 	case "editsave":
 		if( !permission('editCharakter') ) { exit("Sie habe nicht die N&ouml;tigen rechte!"); }
@@ -160,20 +153,19 @@ switch($menu->get(1)){
 	break;
 	
 	case "create":
-		if( !permission('createRaid') ) { exit("Sie habe nicht die N&ouml;tigen rechte!"); }
-		$row['PFAD'] = "admin.php?raid-add";
-		## Selectboxen Füllen
-		$tpl->db_array("status", "SELECT id, statusmsg FROM prefix_raid_statusmsg WHERE sid='1'");
-		$tpl->db_array("leader", "SELECT id, name FROM prefix_raid_charaktere WHERE rang>='4'");
-		$tpl->db_array("gruppen", "SELECT id, gruppen FROM prefix_raid_gruppen WHERE gruppen!='n/a' ORDER BY gruppen ASC");
-		$tpl->db_array("inzen", "SELECT id, name FROM prefix_raid_inzen ORDER BY name ASC");
-		$tpl->db_array("time", "SELECT id, info, CONCAT('Invite: ', start, ' Pull:',begin, ' Ende:', ende) AS time FROM prefix_raid_zeit ORDER BY info ASC");
-		$row['startdate'] = date("d.m.Y", time());
-		$row['button'] = "Erstellen";
-		$row['treff'] = "Treffpunkt";
-		$row['txt'] = "";
-		$tpl->set_ar_out( $row, "newEventForm");
-		exit();
+		if(!permission('createEvent')){ $raid->status(false, 'noperm', 'exit'); }
+		
+		$smarty->assign('button', 'Event erstellen');
+		$smarty->assign('bbcode', getBBCodeButtons());
+		$smarty->assign('zyklus', $aZyklus);
+		$smarty->assign('status', db_html_options("SELECT id, statusmsg FROM prefix_raid_statusmsg WHERE sid='1'") );
+		$smarty->assign('leader', db_html_options("SELECT id, name FROM prefix_raid_charaktere ORDER BY rank ASC") );
+		$smarty->assign('gruppe', db_html_options("SELECT id, name FROM prefix_raid_gruppen WHERE name!='n/a' ORDER BY name ASC") );
+		$smarty->assign('inzen', db_html_options("SELECT id, name FROM prefix_raid_inzen ORDER BY name ASC") );
+		$smarty->assign('time', allRowsFromQuery("SELECT id, info, CONCAT('Invite: ', start, ' Pull:',begin, ' Ende:', ende) AS time FROM prefix_raid_zeit ORDER BY info ASC") );
+		$smarty->display('raid/event_create.tpl');
+
+		$raid->setStatus(true);
 	break;
 	
 	case "edit":	
@@ -183,7 +175,7 @@ switch($menu->get(1)){
 		$row['PFAD'] = "admin.php?raid-editsave-".$menu->get(2);
 		## Selectboxen Füllen
 		$tpl->db_array("status", "SELECT id, statusmsg FROM prefix_raid_statusmsg WHERE sid='1'", 																array("id", $row['statusmsg'], "select", "selected=\"selected\""));
-		$tpl->db_array("leader", "SELECT id, name FROM prefix_raid_charaktere WHERE rang>='10'", 																	array("id", $row['leader'], "select", "selected=\"selected\""));
+		$tpl->db_array("leader", "SELECT id, name FROM prefix_raid_charaktere WHERE rang>='10'", 																array("id", $row['leader'], "select", "selected=\"selected\""));
 		$tpl->db_array("gruppen", "SELECT id, gruppen FROM prefix_raid_gruppen WHERE gruppen!='n/a' ORDER BY gruppen ASC", 										array("id", $row['gruppen'], "select", "selected=\"selected\""));
 		$tpl->db_array("inzen", "SELECT id, name FROM prefix_raid_inzen ORDER BY name ASC",																		array("id", $row['inzen'], "select", "selected=\"selected\""));
 		$tpl->db_array("time", "SELECT id, info, CONCAT('Invite: ', start, ' Pull:',begin, ' Ende:', ende) AS time FROM prefix_raid_zeit ORDER BY info ASC", 	array("id", $row['time'], "select", "selected=\"selected\""));
@@ -202,20 +194,19 @@ switch($menu->get(1)){
 		$res = db_query( "	SELECT 
 								a.id, a.inv, a.gruppen as grp, a.multi,
 								b.name as inzen,
-								c.gruppen, 
+								c.name AS grpname, 
 								d.statusmsg, d.color,
-								e.grpsize, 
 								f.name as leader, 
 								(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as anmeld
 							FROM prefix_raid_raid AS a 
 								LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id
 								LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
-								LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id
-								LEFT JOIN prefix_raid_grpsize AS e ON b.grpsize = e.id 
+								LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id 
 								LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
 							WHERE ".$kalender->where("a.inv")."
-							ORDER BY d.id, a.inv  ASC " );
-							#a.inv ASC, d.id  DESC
+							ORDER BY d.id, a.inv  ASC
+						");
+
 		while( $row = db_fetch_assoc( $res )){
 			
 				$uts = $row['inv'];
@@ -248,7 +239,27 @@ switch($menu->get(1)){
 $design = new design ( 'Admins Area', 'Events', 2 );
 $design->header();
 $status->set();
-$tpl->out(0);
+
+$smarty->assign('events', getAssocArray( "
+	SELECT 
+		a.id, a.inv, a.gruppen as grp, a.multi,
+		b.name as inzen,
+		c.name AS grpname, 
+		d.statusmsg, d.color,
+		e.start, e.ende, e.begin, e.info,
+		f.name as leader, 
+		(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as anmeld
+	FROM prefix_raid_raid AS a 
+		LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id
+		LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
+		LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id
+		LEFT JOIN prefix_raid_zeit AS e ON a.time = e.id
+		LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
+	WHERE ".kalender::where("a.inv")."
+	ORDER BY d.id, a.inv  ASC
+"));
+
+$smarty->display('raid/event_list.tpl');
 copyright();
 $design->footer();
 ?>

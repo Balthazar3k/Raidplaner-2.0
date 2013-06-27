@@ -95,6 +95,15 @@ class raidplaner {
 		$this->setModuleRights($uid, $rang);
 	}
 	
+	public function updateModuleRights(){
+		$stat = array();
+		$charaktere = $this->mainCharaktere();
+		foreach( $charaktere['user'] as $i => $uid )
+			$stat[] = $this->changeModuleRights($uid, $charaktere['rank'][$i]);
+		
+		return ( in_array( 0, $stat) ? FALSE : TRUE );
+	}
+	
 	private function checkRaidStatus(){
 		if( permission('editRaid') ){
 			### Raids auf Gültigkeit überprüfen
@@ -122,17 +131,6 @@ class raidplaner {
 		$extra = getArray('SELECT id AS `keys`, name AS `values` FROM prefix_raid_rang ORDER BY id ASC');
 		ilch_updateConfig('bewerberrang', count( $extra['keys'] )-1, json_encode($extra) );
 	}
-	
-	public function updateModuleRights(){
-		$stat = array();
-		$charaktere = $this->mainCharaktere();
-		foreach( $charaktere['user'] as $i => $uid )
-			$stat[] = $this->changeModuleRights($uid, $charaktere['rank'][$i]);
-		
-		return ( in_array( 0, $stat) ? FALSE : TRUE );
-	}
-	
-	
 	
 	##
 	####

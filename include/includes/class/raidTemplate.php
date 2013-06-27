@@ -281,7 +281,7 @@ class kalender
 		//arrPrint( $this->arr );
 	}
 	
-	public function where($feld)
+	public static function where($feld)
 	{	if( isset( $_POST['kalenderJahr'] ) && isset( $_POST['kalenderMonat'] ) )
 		{	$monat = nuller($_POST['kalenderMonat']);
 			$jahr = nuller($_POST['kalenderJahr']);

@@ -433,6 +433,16 @@ function db_sameKeyVal( $sql ){
 	return $newArray;
 }
 
+function db_html_options( $sql ){
+	$newArray = array();
+	$res = db_query( $sql );
+	while( $row = mysqli_fetch_array( $res ) ){
+		$newArray[$row[0]] = $row[1];
+	}
+	//arrPrint(__FUNCTION__, $newArray);
+	return $newArray;
+}
+
 class status {
 	private $fehler = array();
 	private $erfolg = array();

@@ -1,6 +1,17 @@
 @charset "utf-8";
 
 /* CSS Document */
+.statusMsg{
+	color: #FFF;
+	font-weight: bold;
+	font-family: Ubuntu;
+	font-size: 16px;
+}
+
+.ubuntu{
+	font-family: Ubuntu;
+}
+
 img{ border: none; }
 .left{ float: left; margin-right: 1%; }
 .right{ float: right; margin-left: 1%; }
@@ -178,6 +189,9 @@ form#apply label.error { display: none; }
 /*********************
  *	Kalender Anzeige
  ********************/
+.kalender td{
+	font-family: Ubuntu!important;
+}
 .kalenderHead {
 	color: #000;
 	font-size: 16px;
@@ -195,7 +209,6 @@ form#apply label.error { display: none; }
 }
 
 .kalender_tag, .wochentage{
-	font-family: Arial;
 	font-size: 16px;
 	text-align: left;
 }

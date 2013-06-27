@@ -55,11 +55,20 @@ $raidMsg['success'][2] = "Achtung!";
 $raidMsg['remove'][0] = "L&ouml;schen war <b>nicht</b> erfolgreich!";
 $raidMsg['remove'][1] = "L&ouml;schen war erfolgreich!";
 
+$raidMsg['createEvent'][0] = "Beim erstellen eines Event's ist ein Fehler aufgetreten!";
+$raidMsg['createEvent'][1] = "{count} Event's wurden erfolgreich erstellt!";
+
 $raidMsg['regist'][0] = "beim Senden der Bewerbung ist ein Fehler aufgetreten, bitte versuchen Sie es sp&auml;ter erneut!";
 
 /* TEXTE */
 $raidMsg['rekrutieren'] = "Wir suchen zur Zeite keine weiteren Mitglieder";
 $raidMsg['ilchcfg'] = "Es wurden <b>Wichtige</b> einstellungen am System ge&auml;ndert! Bitte &uuml;berpr&uuml;fen Sie diese <a href='".ilch_getRaidConfigLink()."'>Einstellungen</a> im reiter <b>Raidplaner</b>!";
+
+$aZyklus = array(
+	0 => 'Einmalig',
+	1 => 'T&auml;glich',
+	2 => 'W&ouml;chentlich'
+);
 
 /* N/A
 $raidMsg['name'] = "Name";

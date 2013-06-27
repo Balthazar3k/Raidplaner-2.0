@@ -155,17 +155,23 @@ $(document).ready( function() {
 		});
 	});
 	
-	$("#radio1").live("click", function(e){
+	$("#radio0").live("click", function(e){
 		$("span#vonbis").fadeOut();
 	});
 		
-	$("#radio2, #radio3").live("click", function(e){
+	$("#radio1, #radio2").live("click", function(e){
 		$("span#vonbis").fadeIn();
 	});
 	
 	tooltip($("[tooltip]"));
 	
 	var jQueryActions = function(){
+	
+		$( "div[progressbar]").each( function(){
+			var value = parseInt($(this).attr('progressbar'));
+			var maxValue = parseInt($(this).attr('max'));
+			$(this).progressbar({  value: value, max: maxValue  });
+		});
 	
 		$("div#accordion").accordion({ header: "h3", autoHeight: false });
 		$("select[autoSelect]").each(function(){ $(this).val($(this).attr("autoSelect")); });
@@ -257,7 +263,7 @@ $(document).ready( function() {
 			'transitionIn'		: 'none',
 			'transitionOut'		: 'none',
 			'type'				: 'inline',
-			onComplete			: jQueryActions()
+			onComplete			: function(){ jQueryActions(); }
 		});
 	});
 	
