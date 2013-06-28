@@ -1,5 +1,5 @@
 INSERT INTO `prefix_config` (`schl`, `typ`, `typextra`, `kat`, `frage`, `wert`, `pos`, `hide`, `helptext`) VALUES
-('arrPrint', 'r2', NULL, 'Raidplaner', 'arrPrint anzeigen? (ist nur sichtbar für admins)', '1', 15, 0, NULL),
+('arrPrint', 'r2', NULL, 'Raidplaner', 'arrPrint anzeigen? (ist nur sichtbar für admins)', '0', 15, 0, NULL),
 ('maxDate', 'input', NULL, 'Raidplaner', 'min Alter zum Bewerben', '18', 6, 0, NULL),
 ('bewerbung', 'textarea', NULL, 'Raidplaner', 'Bewerbung''s Msg', 'Hier können Sie sich Bewerben!', 14, 0, NULL),
 ('BattleNetAccesses', 'input', '2013-06-26', 'Raidplaner', 'Max Zugriffe pro Tag auf die Battle.net API', '1996', 9, 0, NULL),

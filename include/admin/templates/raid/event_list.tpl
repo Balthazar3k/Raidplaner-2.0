@@ -49,4 +49,3 @@
 		<td width="50%" class="Cmite" colspan="7"></td>
 	</tr>
 </table>
-{debug}

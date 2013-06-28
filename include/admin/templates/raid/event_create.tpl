@@ -62,4 +62,3 @@
 	  </tr>
 	</table>
 </form>
-{debug}
