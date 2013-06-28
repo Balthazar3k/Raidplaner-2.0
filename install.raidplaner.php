@@ -11,26 +11,16 @@ define( "main", true );
 include("include/includes/config.php");
 include("include/includes/loader.php");
 
+$install_file = "raidplaner-2.0.sql";
+
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 @ini_set('display_errors','On');
 
 db_connect ();
 
-/*if( $_GET['install'] ){
-	$arrSQL = explode("\n", $rSQL );
-	$sqlStat = TRUE;
-	foreach( $arrSQL as $value ){
-		if( !empty( $value ) ){
-			if( db_query( escape( trim( $value ) , "string" ) ) ){
-	
-			}else{
-				$sqlStat = FALSE;
-			}
-		}
-	}*/
 if( $_GET['install'] ){
 	$sqlStat = TRUE;
-	$sql_file = implode('',file('RAIDPLANER.sql'));
+	$sql_file = implode('',file($install_file));
 	$sql_file = preg_replace ("/(\015\012|\015|\012)/", "\n", $sql_file);
 	$sql_statements = explode(";\n",$sql_file);
 	foreach ( $sql_statements as $sql_statement ) {
@@ -44,7 +34,7 @@ if( $_GET['install'] ){
 	}
 	
 	if( $sqlStat ){
-		echo "Eintrag in die MySQL Datenbank war <b>erfolgreich</b>!<br>Lösch bitte die \"install.raidplaner.php\" und dir \"RAIDPLANER.sql\"";
+		echo "Eintrag in die MySQL Datenbank war <b>erfolgreich</b>!<br>Lösch bitte die \"install.raidplaner.php\" und dir \"".$install_file."\"";
 	}else{
 		echo "Eintrag in die Datenbank war <b>nicht</b> erfolgreich!";
 	}
