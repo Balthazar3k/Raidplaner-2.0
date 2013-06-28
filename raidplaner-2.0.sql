@@ -19,8 +19,8 @@ INSERT INTO `prefix_config` (`schl`, `typ`, `typextra`, `kat`, `frage`, `wert`, 
 INSERT INTO `prefix_credits` (`sys`, `name`, `version`, `url`, `lizenzname`, `lizenzurl`) VALUES
 ('ilch', 'Raidplaner Modul', '2.0', 'http://balthazar3k.github.com/Raidplaner-2.0/', 'GPL', 'http://www.gnu.de/gpl-ger.html');
 
-INSERT INTO `prefix_loader` (`id`, `pos`, `task`, `file`, `description`) VALUES
-(22, 55, 'func', 'raidplaner.php', 'Raidplaner Funktionen');
+INSERT INTO `prefix_loader` (`task`, `file`, `description`) VALUES
+('func', 'raidplaner.php', 'Raidplaner Funktionen');
 
 INSERT INTO `prefix_modules` (`url`, `name`, `gshow`, `ashow`, `fright`, `menu`, `pos`) VALUES
 ('raidinzen', 'Instanzen', 1, 1, 1, 'Raidplaner', 12),
