@@ -11,6 +11,11 @@
 		</td>
 	</tr>
 	<tr>
+		<td class="Cnorm" colspan="7">
+			
+		</td>
+	</tr>
+	<tr>
 		<th class="Chead" align="center">#id</th>
 		<th class="Chead">Event Datum</th>
 		<th class="Chead" align="center">Dungeon</th>
