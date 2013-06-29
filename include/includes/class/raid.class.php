@@ -527,7 +527,7 @@ class raidplaner {
 	public function uploadFile($key, $newname, $path, &$uploadStatus=NULL ){
 		if( !isset( $_FILES[$key] ) || $_FILES[$key]['error'] > 0 ){ return false; }
 		if( $_FILES[$key]['size'] == 0 ){ return false; }
-		
+
 		$ext = ".".pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION);
 		$newname = urlencode($newname) . $ext;
 		
@@ -539,7 +539,10 @@ class raidplaner {
 									'size' => $_FILES[$key]['size']
 			);
 			
-			$this->status(true, 'Bild "'.$_FILES[$key]['name'].'" wurde erfolgreich Hochgeladen!', 3);
+			if( isset( $_POST['img'] ) && $_POST['img'] == 'upload' )
+				$_POST['img'] = $uploadStatus['path'];
+			
+			$this->status(true, 'Bild "'.$newname.'" wurde erfolgreich Hochgeladen!', 3);
 		}
 	
 	}
@@ -697,6 +700,10 @@ class raidplaner {
 		}else{
 			$this->status(db_query("DELETE FROM ". $table ." WHERE id='".$id."';"));
 		}
+	}
+	
+	public function truncate( $table ){
+		return db_query("TRUNCATE TABLE ".$table);
 	}
 	
 	##

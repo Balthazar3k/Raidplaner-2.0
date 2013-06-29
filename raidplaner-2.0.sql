@@ -94,16 +94,26 @@ CREATE TABLE IF NOT EXISTS `prefix_raid_gruppen` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `prefix_raid_inzen` (
+CREATE TABLE IF NOT EXISTS `prefix_raid_dungeons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
+  `alias` varchar(50) NOT NULL,
   `level` int(11) NOT NULL DEFAULT '0',
-  `grpsize` int(11) NOT NULL DEFAULT '0',
+  `size` int(11) NOT NULL DEFAULT '0',
   `img` varchar(255) NOT NULL DEFAULT '',
-  `info` int(11) NOT NULL DEFAULT '0',
+  `info` text NOT NULL,
   `maxbosse` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+INSERT INTO `prefix_raid_dungeons` (`name`, `alias`, `level`, `size`, `img`, `info`, `maxbosse`) VALUES
+('Geschmolzener Kern', 'GK', 60, 40, '', '', 0),
+('Peschschwingenhort', 'PSH', 60, 40, '', '', 0),
+('Ruinen von Ahn''Qiraj', 'AQ10', 60, 10, '', '', 0),
+('Ruinen von Ahn''Qiraj', 'AQ40', 60, 40, '', '', 0),
+('Karazhan', 'Kar', 70, 10, '', '', 0),
+('Magtheridons Kammer', 'Mag', 70, 25, '', '', 0),
+('Onyxias Hort', 'Ony', 60, 40, '', '', 0);
 
 
 CREATE TABLE IF NOT EXISTS `prefix_raid_klassen` (

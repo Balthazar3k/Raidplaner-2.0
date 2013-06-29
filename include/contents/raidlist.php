@@ -49,7 +49,7 @@ switch($menu->get(1)){
 							(SELECT COUNT(cc.id) FROM prefix_raid_anmeldung AS cc WHERE a.id = cc.rid AND cc.stat = 12) AS cZusagen,
 							ROUND(((SELECT COUNT(dd.rid) FROM prefix_raid_bosscounter AS dd WHERE abid = dd.rid) * 100 / b.maxbosse)) AS pz  
 						FROM prefix_raid_raid AS a 
-							LEFT JOIN prefix_raid_inzen AS b ON a.inzen=b.id 
+							LEFT JOIN prefix_raid_dungeons AS b ON a.inzen=b.id 
 							LEFT JOIN prefix_raid_statusmsg AS c ON a.statusmsg=c.id 
 							LEFT JOIN prefix_raid_grpsize AS d ON b.grpsize=d.id 
 							LEFT JOIN prefix_raid_stammrechte AS e ON a.stammgrp=e.sid AND e.cid=".( !empty( $_SESSION['charid'] ) ? $_SESSION['charid'] : 0 )." 
@@ -169,7 +169,7 @@ switch($menu->get(1)){
 								(SELECT 
 									SUM(bbb.maxbosse)
 								FROM prefix_raid_raid AS aaa 
-									LEFT JOIN prefix_raid_inzen AS bbb ON aaa.inzen = bbb.id 
+									LEFT JOIN prefix_raid_dungeons AS bbb ON aaa.inzen = bbb.id 
 								WHERE a.id = aaa.gruppen 
 								) AS amBosse,
 							(SELECT COUNT(gg.id) FROM prefix_raid_bosscounter AS gg WHERE a.id=gg.grpid) AS akBosse 
@@ -244,7 +244,7 @@ switch($menu->get(1)){
 							(SELECT COUNT(cc.id) FROM prefix_raid_anmeldung AS cc WHERE a.id = cc.rid AND cc.stat = 12) AS cZusagen,
 							ROUND(((SELECT COUNT(dd.rid) FROM prefix_raid_bosscounter AS dd WHERE abid = dd.rid) * 100 / b.maxbosse)) AS pz  
 						FROM prefix_raid_raid AS a 
-							LEFT JOIN prefix_raid_inzen AS b ON a.inzen=b.id 
+							LEFT JOIN prefix_raid_dungeons AS b ON a.inzen=b.id 
 							LEFT JOIN prefix_raid_statusmsg AS c ON a.statusmsg=c.id 
 							LEFT JOIN prefix_raid_grpsize AS d ON b.grpsize=d.id 
 							LEFT JOIN prefix_raid_stammrechte AS e ON a.stammgrp=e.sid AND e.cid=".( !empty( $_SESSION['charid'] ) ? $_SESSION['charid'] : 0 )." 
@@ -348,7 +348,7 @@ switch($menu->get(1)){
 								i.grpsize, 
 								(SELECT COUNT(aa.id) FROM prefix_raid_anmeldung AS aa WHERE aa.rid=a.id AND stat=12) AS gamers 
 							FROM prefix_raid_raid AS a 
-								LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id
+								LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id
 								LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
 								LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id
 								LEFT JOIN prefix_raid_charaktere AS e ON a.leader = e.id

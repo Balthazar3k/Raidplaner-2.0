@@ -18,7 +18,12 @@ function smarty_modifier_icon($str)
 					"forward" => $iStart . "forward" . $iEnd,
 					"add" => $iStart . "add" . $iEnd,
 					"info" => $iStart . "info" . $iEnd,
-					"grey" => $iStart . "grey" . $iEnd);
+					"grey" => $iStart . "grey" . $iEnd,
+					"true" => $iStart . "validgreen" . $iEnd,
+					"false" => $iStart . "cancel" . $iEnd,
+					"1" => $iStart . "validgreen" . $iEnd,
+					"0" => $iStart . "cancel" . $iEnd,
+					"!" => $iStart . "attention" . $iEnd);
 					
 	if( !empty( $str ) ){
 		return $icon[$str];

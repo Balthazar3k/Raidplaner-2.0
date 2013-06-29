@@ -6,7 +6,7 @@ $res = db_query("SELECT
                     a.id, a.inv, 
                     b.name
                 FROM prefix_raid_raid AS a 
-                    LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id  
+                    LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id  
                 WHERE 
                     a.inv >= ".time()." AND 
                     a.statusmsg = 1 

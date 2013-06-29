@@ -78,13 +78,17 @@ function is_img( $pfad ){
 function imgArray($pfad, &$setExtra=NULL){
 	$images = array();
 	
+	$ignor = array(
+		".gitignore"
+	);
+	
 	if( $setExtra != NULL ){
 		$images = array_merge( $images, $setExtra );
 	}
 	
 	$open = opendir( $pfad );
 	while( $pic = readdir( $open )){
-		if( is_file( $pfad.$pic )){
+		if( is_file( $pfad.$pic ) && !in_array($pic, $ignor)){
 			$images[$pfad.$pic] = $pic;
 		}
 	}

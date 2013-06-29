@@ -272,7 +272,9 @@ $(document).ready( function() {
 	  'transitionIn'	:	'elastic',
 	  'transitionOut'	:	'elastic',
 	  'speedIn'			:	600, 
-	  'speedOut'		:	1000, 
+	  'speedOut'		:	1000,
+	  'titleShow'		: 	true,
+	  'titlePosition'	:	'over',
 	  'overlayShow'	:	false
 	});
 	

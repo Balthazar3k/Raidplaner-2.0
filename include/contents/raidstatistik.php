@@ -80,7 +80,7 @@ switch($menu->get(1)){
 				FROM 
 				prefix_raid_bosse AS a, 
 				prefix_raid_bosscounter AS b, 
-				prefix_raid_inzen AS c 
+				prefix_raid_dungeons AS c 
 				WHERE 
 				a.id=b.bid AND 
 				a.inzen=c.id 
@@ -130,7 +130,7 @@ switch($menu->get(1)){
 					(SELECT COUNT(bb.id) FROM prefix_raid_raid AS bb WHERE bb.inzen=a.id) AS allRaids, 
 					((SELECT COUNT(bb.id) FROM prefix_raid_raid AS bb WHERE bb.inzen=a.id) * a.maxbosse) AS cAllCanKilledBosse, 
 					((SELECT COUNT(dd.id) FROM prefix_raid_bosscounter AS dd WHERE dd.iid=a.id) / a.maxbosse ) AS clear  
-				FROM prefix_raid_inzen AS a 
+				FROM prefix_raid_dungeons AS a 
 					LEFT JOIN prefix_raid_grpsize AS b ON a.grpsize=b.id 
 					LEFT JOIN prefix_raid_info AS c ON a.info=c.id 
 					LEFT JOIN prefix_raid_level AS d ON a.level=d.id

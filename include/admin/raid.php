@@ -161,7 +161,7 @@ switch($menu->get(1)){
 		$smarty->assign('status', db_html_options("SELECT id, statusmsg FROM prefix_raid_statusmsg WHERE sid='1'") );
 		$smarty->assign('leader', db_html_options("SELECT id, name FROM prefix_raid_charaktere ORDER BY rank ASC") );
 		$smarty->assign('gruppe', db_html_options("SELECT id, name FROM prefix_raid_gruppen WHERE name!='n/a' ORDER BY name ASC") );
-		$smarty->assign('inzen', db_html_options("SELECT id, name FROM prefix_raid_inzen ORDER BY name ASC") );
+		$smarty->assign('inzen', db_html_options("SELECT id, name FROM prefix_raid_dungeons ORDER BY name ASC") );
 		$smarty->assign('time', allRowsFromQuery("SELECT id, info, CONCAT('Invite: ', start, ' Pull:',begin, ' Ende:', ende) AS time FROM prefix_raid_zeit ORDER BY info ASC") );
 		$smarty->display('raid/event_create.tpl');
 
@@ -177,7 +177,7 @@ switch($menu->get(1)){
 		$tpl->db_array("status", "SELECT id, statusmsg FROM prefix_raid_statusmsg WHERE sid='1'", 																array("id", $row['statusmsg'], "select", "selected=\"selected\""));
 		$tpl->db_array("leader", "SELECT id, name FROM prefix_raid_charaktere WHERE rang>='10'", 																array("id", $row['leader'], "select", "selected=\"selected\""));
 		$tpl->db_array("gruppen", "SELECT id, gruppen FROM prefix_raid_gruppen WHERE gruppen!='n/a' ORDER BY gruppen ASC", 										array("id", $row['gruppen'], "select", "selected=\"selected\""));
-		$tpl->db_array("inzen", "SELECT id, name FROM prefix_raid_inzen ORDER BY name ASC",																		array("id", $row['inzen'], "select", "selected=\"selected\""));
+		$tpl->db_array("inzen", "SELECT id, name FROM prefix_raid_dungeons ORDER BY name ASC",																		array("id", $row['inzen'], "select", "selected=\"selected\""));
 		$tpl->db_array("time", "SELECT id, info, CONCAT('Invite: ', start, ' Pull:',begin, ' Ende:', ende) AS time FROM prefix_raid_zeit ORDER BY info ASC", 	array("id", $row['time'], "select", "selected=\"selected\""));
 		$row['startdate'] = date("d.m.Y", $row['inv']);
 		$row['button'] = "&Auml;ndern";
@@ -199,7 +199,7 @@ switch($menu->get(1)){
 								f.name as leader, 
 								(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as anmeld
 							FROM prefix_raid_raid AS a 
-								LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id
+								LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id
 								LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
 								LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id 
 								LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
@@ -250,7 +250,7 @@ $smarty->assign('events', getAssocArray( "
 		f.name as leader, 
 		(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as anmeld
 	FROM prefix_raid_raid AS a 
-		LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id
+		LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id
 		LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
 		LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id
 		LEFT JOIN prefix_raid_zeit AS e ON a.time = e.id

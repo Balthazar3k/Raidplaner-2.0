@@ -55,8 +55,20 @@ $raidMsg['success'][2] = "Achtung!";
 $raidMsg['remove'][0] = "L&ouml;schen war <b>nicht</b> erfolgreich!";
 $raidMsg['remove'][1] = "L&ouml;schen war erfolgreich!";
 
+$raidMsg['removeImage'][0] = "das Bild \"{img}\" konnte <b>nicht</b> gel&ouml;scht werden!";
+$raidMsg['removeImage'][1] = "L&ouml;schen von dem Bild \"{img}\" war erfolgreich!";
+
 $raidMsg['createEvent'][0] = "Beim erstellen eines Event's ist ein Fehler aufgetreten!";
 $raidMsg['createEvent'][1] = "{count} Event's wurden erfolgreich erstellt!";
+
+$raidMsg['createDungeon'][0] = "Beim erstellen von \"{alias} - {name}\" ist ein Fehler aufgetreten!";
+$raidMsg['createDungeon'][1] = "Dungeon \"{alias} - {name}\" wurde erfolgreich erstellt!";
+
+$raidMsg['editDungeon'][0] = "Beim bearbeiten von \"{alias} - {name}\" ist ein Fehler aufgetreten!";
+$raidMsg['editDungeon'][1] = "Dungeon \"{alias} - {name}\" wurde erfolgreich ge&auml;ndert!";
+
+$raidMsg['removeDungeon'][0] = "Beim L&ouml;schen von \"{alias} - {name}\" ist ein Fehler aufgetreten!";
+$raidMsg['removeDungeon'][1] = "Dungeon \"{alias} - {name}\" wurde erfolgreich gel&ouml;scht!";
 
 $raidMsg['regist'][0] = "beim Senden der Bewerbung ist ein Fehler aufgetreten, bitte versuchen Sie es sp&auml;ter erneut!";
 

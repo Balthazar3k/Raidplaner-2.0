@@ -9,7 +9,7 @@ $res = db_query("SELECT
                     b.name,
                     c.grpsize  
                 FROM prefix_raid_raid AS a 
-                    LEFT JOIN prefix_raid_inzen AS b ON a.inzen = b.id  
+                    LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id  
                     LEFT JOIN prefix_raid_grpsize AS c ON b.grpsize = c.id 
                 WHERE  
                     a.statusmsg = 2 
