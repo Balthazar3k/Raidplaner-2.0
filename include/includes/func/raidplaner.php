@@ -2,10 +2,9 @@
 ### b3k_func.php Copyright: 2007/2008 edit 2009, 2012 By: Balthazar3k.de
 
 require_once('include/includes/class/raid.class.php');
-require_once('include/includes/class/raidTemplate.php');
+require_once('include/includes/class/raidKalender.php');
 require_once('include/raidplaner/language/message.php');
 
-$status = new status();
 $raid = new raidplaner();
 
 function copyright(){
@@ -398,7 +397,7 @@ function arrPrint(){
 			unset( $arg[0] );
 		}
 		
-		echo "<div align='left' id='arrPrint".$arrPrintNr."'><a href='#arrPrint".$arrPrintNr."'>arrPrint:".@$name."</a><br />";
+		echo "<div align='left' id='arrxPrint".$arrPrintNr."'><a href='#arrPrint".$arrPrintNr."'>arrPrint:".@$name."</a><br />";
 		
 		foreach( $arg AS $key => $value )
 		{	if( is_array( $arg ) )
@@ -447,73 +446,6 @@ function db_html_options( $sql ){
 	return $newArray;
 }
 
-class status {
-	private $fehler = array();
-	private $erfolg = array();
-	private $achtung = array();
-	protected $tpl = "";
-	protected $trash = array();
-	
-	public function __construct(){
-		$this->tpl = new raidTPL("raid/status.htm");
-	}
-	
-	public function f($msg){
-		$this->fehler[] = $msg;
-		return false;
-	}
-	
-	public function t($msg){
-		$this->erfolg[] = $msg;
-		return true;
-	}
-	
-	public function a($msg){
-		$this->achtung[] = $msg;
-		return true;
-	}
-	
-	public function get(){
-		return $this->getMsgString();	
-	}
-	
-	public function set(){
-		echo $this->getMsgString();	
-	}
-	
-	public function close(){
-		exit($this->getMsgString());	
-	}
-	
-	protected function getMsgString(){
-		$status = array();
-		
-		if( is_array($this->erfolg) && count( $this->erfolg ) > 0 ){
-			$str = implode("<br />", $this->erfolg );
-			$status[] = $this->tpl->set_ar_get(array("status" => "erfolg", "img" => "validgreen", "msg" => $str), 0);
-		}
-		
-		if( is_array($this->fehler) && count( $this->fehler ) > 0 ){
-			$str = implode("<br />", $this->fehler );
-			$status[] = $this->tpl->set_ar_get(array("status" => "fehler", "img" => "cancel", "msg" => $str), 0);
-		}
-		
-		if( is_array($this->achtung) && count( $this->achtung ) > 0 ){
-			$str = implode("<br />", $this->achtung );
-			$status[] = $this->tpl->set_ar_get(array("status" => "achtung", "img" => "attention", "msg" => $str), 0);
-		}
-		
-		$this->fehler = array();
-		$this->erfolg = array();
-		$this->achtung = array();
-		
-		if( count( $status ) > 0 ){
-			$this->trash = $status;
-			return implode("<br />", $status);
-		}
-	}
-}
-
 function getArray( $sql ){
 	$i = 0;
 	$newArray = array();
@@ -553,6 +485,40 @@ function ilch_updateConfig($schl, $wert, $typextra = NULL){
 function ilch_getRaidConfigLink(){
 	return "admin.php?allg#tabs-raidplaner";
 }
+
+function zyklus( $option, $from, $to ){
+	$dates = array();
+
+	$h = date("H", $from);
+	$i = date("i", $from);
+	$m = date("m", $from);
+	$d = date("d", $from);
+	$y = date("Y", $from);
+	
+	switch($option){
+		case 0: // Einmalig
+				$dates[] = $from; return $dates; break;
+		
+		case 1: // Täglich
+				$days = floor(($to-$from)/(86400));
+				for( $x = 0; $x < $days+1; $x++)
+				{	$dates[] = mktime($h, $i, 0, $m, $d+($x), $y);
+				}
+				
+				return $dates;
+		break;
+		
+		case 2: // Wöchentlich 
+				$weeks = floor(($to-$from)/(86400*7));
+				for( $x = 0; $x < $weeks+1; $x++)
+				{	$dates[] = mktime($h, $i, 0, $m, $d+(7*$x), $y);
+				}
+				
+				return $dates;
+		break;
+	}
+}
+
 
 /* Ausgemustert
 

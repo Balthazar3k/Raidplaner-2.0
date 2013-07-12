@@ -1,6 +1,58 @@
 <?php
 defined ('main') or die ( 'no direct access' );
 
+$kalender = new kalender;
+
+switch( $menu->get(1) ):
+	case 'kalender':
+		$res = db_query( "	
+			SELECT 
+				a.id, a.inv, a.gruppen as grp, a.multi,
+				b.alias, b.size, b.name as dungeon,
+				c.name AS grpname, 
+				d.statusmsg, d.color,
+				f.name as leader, 
+				(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as anmeld
+			FROM prefix_raid_raid AS a 
+				LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id
+				LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
+				LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id 
+				LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
+			WHERE ".$kalender->where("a.inv")."
+			ORDER BY d.id, a.inv  ASC
+		");
+		
+		while( $row = db_fetch_assoc( $res ) ){
+			$kalender->fill($row['inv'], "
+				<b>".$row['alias']." um ".date("H:i",$row['inv'])."</b>
+				<br />
+				<span class=\"small\">Anmeldungen: ".$row['anmeld']."/".$row['size']."</span>
+			", array(
+				"style" => "border: 3px solid ".$row['color'].";"
+			));
+		}
+		
+		$res = db_query("
+			SELECT 
+				id, name, gebdatum
+			FROM prefix_user
+			WHERE
+				".$kalender->where('gebdatum', 'Y-m-d')."
+			ORDER BY id ASC
+		");
+		
+		#arrPrint(__LINE__, $kalender->getArray);
+		
+		while( $row = db_fetch_assoc( $res ) ){
+			arrPrint(__LINE__, $row);
+			$kalender->fill(strtotime($row['gebdatum']), "<b>".$row['name']."</b>");
+		}
+		
+		$kalender->set(820);
+		exit();
+	break;
+endswitch;
+
 require_once("include/includes/func/b3k_func.php");
 
 if( $menu->get(1) == "bossinfos" ){

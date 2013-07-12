@@ -190,34 +190,34 @@ form#apply label.error { display: none; }
 /*********************
  *	Kalender Anzeige
  ********************/
-.kalender td{
-	font-family: Ubuntu!important;
+#kalender *{
+	font-family: Ubuntu, Tahoma;
+	font-size: 13px;
 }
-.kalenderHead {
-	color: #000;
-	font-size: 16px;
-	text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.5 );
+#kalender td.Cmite{
+	opacity: 0.5;
 }
-.kalender td, .wochentage {
-	text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.8 );
+
+#kalender .small {
+	font-size: 11px;
+}
+
+#kalender .event {
+	margin-top: 1px;
+	border-radius: 5px;
+	border: 1px solid #888;
+}
+
+.dayTitle{
+	font-size: 14px;
 	font-weight: bold;
-}
-
-.kalenderInhalt td { 	
-	text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.8 );
-	font-weight: 100;
-	font-size: 10px!important;
-}
-
-.kalender_tag, .wochentage{
-	font-size: 16px;
+	text-shadow: 1px 1px 0 #FFF;
 	text-align: left;
+	
+	display: block;
+	box-shadow: 0 1px 0 #FFF;
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.2);
 }
-
-.kalender_tag {
-	border-bottom: 1px dotted rgba( 0, 0, 0, 0.2);
-}
-
 
 /*********************
  *	Status Anzeige

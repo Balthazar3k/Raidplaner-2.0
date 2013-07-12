@@ -6,40 +6,7 @@ defined ('admin') or die ( 'only admin access' );
 require_once('include/includes/class/iSmarty.php');
 $smarty = new iSmarty();
 
-function zyklus( $option, $from, $to ){
-	$dates = array();
-
-	$h = date("H", $from);
-	$i = date("i", $from);
-	$m = date("m", $from);
-	$d = date("d", $from);
-	$y = date("Y", $from);
-	
-	switch($option){
-		case 0: // Einmalig
-				$dates[] = $from; return $dates; break;
-		
-		case 1: // Täglich
-				$days = floor(($to-$from)/(86400));
-				for( $x = 0; $x < $days+1; $x++)
-				{	$dates[] = mktime($h, $i, 0, $m, $d+($x), $y);
-				}
-				
-				return $dates;
-		break;
-		
-		case 2: // Wöchentlich 
-				$weeks = floor(($to-$from)/(86400*7));
-				for( $x = 0; $x < $weeks+1; $x++)
-				{	$dates[] = mktime($h, $i, 0, $m, $d+(7*$x), $y);
-				}
-				
-				return $dates;
-		break;
-	}
-}
-
-$tpl = new raidTPL ( 'raid/raid.htm',1 );
+$tpl = new tpl ( 'raid/raid.htm',1 );
 
 switch($menu->get(1)){
 	case "add":
@@ -238,8 +205,11 @@ switch($menu->get(1)){
 
 $design = new design ( 'Admins Area', 'Events', 2 );
 $design->header();
-$status->set();
 
+$kalender = new kalender;
+
+$smarty->assign('monatsnamen', $kalender->monthName());
+$smarty->assign('jahre', $kalender->years());
 $smarty->assign('events', getAssocArray( "
 	SELECT 
 		a.id, a.inv, a.gruppen as grp, a.multi,
@@ -255,11 +225,12 @@ $smarty->assign('events', getAssocArray( "
 		LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id
 		LEFT JOIN prefix_raid_zeit AS e ON a.time = e.id
 		LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
-	WHERE ".kalender::where("a.inv")."
+	WHERE ".$kalender->where("a.inv")."
 	ORDER BY d.id, a.inv  ASC
 "));
 
 $smarty->display('raid/event_list.tpl');
+
 copyright();
 $design->footer();
 ?>

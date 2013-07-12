@@ -64,7 +64,6 @@ switch( $menu->get(1) ){
 $design = new design ( 'Raid Rechte', 'Raid Rechte', 2 );
 $design->header();
 
-$status->set();
 arrPrint( $_POST, @$newArray, @$res, $_SESSION );
 
 $raidRechteSQL = "

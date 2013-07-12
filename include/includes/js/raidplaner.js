@@ -1,6 +1,7 @@
 (function(a){function d(b){var c=b||window.event,d=[].slice.call(arguments,1),e=0,f=!0,g=0,h=0;return b=a.event.fix(c),b.type="mousewheel",c.wheelDelta&&(e=c.wheelDelta/120),c.detail&&(e=-c.detail/3),h=e,c.axis!==undefined&&c.axis===c.HORIZONTAL_AXIS&&(h=0,g=-1*e),c.wheelDeltaY!==undefined&&(h=c.wheelDeltaY/120),c.wheelDeltaX!==undefined&&(g=-1*c.wheelDeltaX/120),d.unshift(b,e,g,h),(a.event.dispatch||a.event.handle).apply(this,d)}var b=["DOMMouseScroll","mousewheel"];if(a.event.fixHooks)for(var c=b.length;c;)a.event.fixHooks[b[--c]]=a.event.mouseHooks;a.event.special.mousewheel={setup:function(){if(this.addEventListener)for(var a=b.length;a;)this.addEventListener(b[--a],d,!1);else this.onmousewheel=d},teardown:function(){if(this.removeEventListener)for(var a=b.length;a;)this.removeEventListener(b[--a],d,!1);else this.onmousewheel=null}},a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})})(jQuery)
 //location.reload()
 // Seiten Manipulation
+
 $(document).ready( function() {
 
 	$('[id^=colorpicker], [name*=farbe], [name*=Farbe]').each(function(){
@@ -167,6 +168,14 @@ $(document).ready( function() {
 	
 	var jQueryActions = function(){
 	
+		$('a[slide]').live('click', function(event){
+			event.preventDefault();
+			var $container = $(this).attr('slide');
+			$($container).slideDown(function(){
+				$(this).delay(10000).slideUp();
+			});
+		});
+	
 		$( "div[progressbar]").each( function(){
 			var value = parseInt($(this).attr('progressbar'));
 			var maxValue = parseInt($(this).attr('max'));
@@ -184,7 +193,20 @@ $(document).ready( function() {
 		
 		
 		
-		$( "#radio" ).buttonset();
+		$( "span#radio" ).buttonset();
+		
+		$( "div.buttonset" ).buttonset();
+		
+		$( "div.buttonset.kalender a:first" ).button({
+			icons: { primary: "ui-icon-circle-triangle-w" }
+		}).next().button({
+			icons: { 
+				primary: "ui-icon-gear",
+				secondary: "ui-icon-gear" 
+			}
+		}).next().button({
+			icons: { secondary: "ui-icon-circle-triangle-e" }
+		});
 		
 			// Datepicker
 		$("#datepicker, #datepicker2").datepicker({
@@ -205,6 +227,8 @@ $(document).ready( function() {
 				changeMonth: true,
 				changeYear: true
 		});
+		
+		
 		
 		$("div.erfolg, div.achtung").delay(2500).slideUp();
 		
@@ -250,8 +274,7 @@ $(document).ready( function() {
 			}
 		});
 	});
-		
-	
+			
 	//fancybox
 	$('a[fancybox=inline]').live('click', function(e){
 		e.preventDefault();
@@ -263,6 +286,17 @@ $(document).ready( function() {
 			'transitionIn'		: 'none',
 			'transitionOut'		: 'none',
 			'type'				: 'inline',
+			onComplete			: function(){ jQueryActions(); }
+		});
+	});
+	
+	$("a[fancybox=kalender], a[href*='raidlist-kalender']").live('click', function(e){
+		e.preventDefault();
+		$.fancybox({
+			'href'				: 'index.php?raidlist-kalender',
+			'showCloseButton'	: true,
+			'titlePosition' 	: 'inside',
+			'titleFormat'		: function(){ $('#kalenderNavigation').show().html() },
 			onComplete			: function(){ jQueryActions(); }
 		});
 	});
