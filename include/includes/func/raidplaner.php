@@ -118,19 +118,6 @@ function pz($a, $b, $c = 0){
 	}	
 }
 
-function ascape( $string ){
-	if( is_integer( $string )){
-		$option = 'integer';
-	}elseif( is_string( $string ) && strlen( $string ) > 250 ){
-		$option = 'textarea';
-	}else{
-		$option = 'string';
-	}
-	
-	return escape( $string, $option );
-}
-
-
 function Alter( $date ){
 	$date = strtotime($date);
 	
@@ -397,7 +384,7 @@ function arrPrint(){
 			unset( $arg[0] );
 		}
 		
-		echo "<div align='left' id='arrxPrint".$arrPrintNr."'><a href='#arrPrint".$arrPrintNr."'>arrPrint:".@$name."</a><br />";
+		echo "<div align='left' id='arrPrint".$arrPrintNr."'><a href='#arrPrint".$arrPrintNr."'>arrPrint:".@$name."</a><br />";
 		
 		foreach( $arg AS $key => $value )
 		{	if( is_array( $arg ) )

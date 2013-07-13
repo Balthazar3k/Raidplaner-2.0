@@ -48,8 +48,8 @@
 	{foreach $inzen as $i}
 	<tr id="inzen{$i.id}" class="Cmite ubuntu">
 		<td align="center">{$i.id}</td>
-		<td align="center"><b>{$i.alias}</b></td>
-		<td>{$i.name}</td>
+		<td align="center"><b>{$i.alias}{$i.size}</b></td>
+		<td align="center">{$i.name}</td>
 		<td align="center">{$i.level}</td>
 		<td align="center">{$i.size}</td>
 		<td align="center">

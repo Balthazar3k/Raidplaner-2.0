@@ -38,7 +38,7 @@ $raid->setStatus(false);
 $imgMerge = array("" => "", "upload" => "Bild Hochladen");
 $images = imgArray('include/raidplaner/images/dungeons/', $imgMerge);
 $smarty->assign('images',  $images);
-$smarty->assign('inzen', allRowsFromQuery('SELECT * FROM `prefix_raid_dungeons` ORDER BY name ASC'));
+$smarty->assign('inzen', allRowsFromQuery('SELECT * FROM `prefix_raid_dungeons` ORDER BY name ASC, level DESC'));
 $smarty->display('raid/raidinzen.tpl');
 
 copyright();

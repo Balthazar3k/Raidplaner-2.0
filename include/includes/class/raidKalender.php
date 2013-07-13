@@ -55,10 +55,10 @@ class kalender {
 	
 	
 	public function getDate($date=false){
-		if( isset( $_REQUEST['day'] ) && isset( $_REQUEST['month'] ) && isset( $_REQUEST['year'] ) ){
-			return mktime( 0, 0, 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year'] );
-		}elseif( isset( $_REQUEST['date'] ) && is_string( $_REQUEST['date'] ) ){
+		if( isset( $_REQUEST['date'] ) && is_string( $_REQUEST['date'] ) ){
 			return strtotime( $_REQUEST['date'] );
+		}elseif( isset( $_REQUEST['day'] ) && isset( $_REQUEST['month'] ) && isset( $_REQUEST['year'] ) ){
+			return mktime( 0, 0, 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year'] );
 		}elseif( $date && is_string( $date ) ){
 			return strtotime( $date );
 		}else{
@@ -71,12 +71,12 @@ class kalender {
 		# Das einem Monats Plat eines Kalenders gleich kommt
 		$time = $this->getDate();
 		
-		$maxDays = 42;											# Ein Kalenderblatt hat insgesamt 42 Tage für eine Optimale darstellung
-		$countDays = 0;											# Zähler um den nächsten Monat zu berechnen
-		$this->dayNow = $dayNow   = intval(date("d", $time)); 	# Der Heutige Tag
-		$this->monthNow = $monthNow = intval(date("m", $time));	# Der aktuelle Monat
-		$this->yearNow = $yearNow  = intval(date("Y", $time));	# Das aktuelle Jahr
-		$aDaysNow = date("t", $time); 							# Anzahl der Tage in diesem Monat
+		$maxDays = 42;																# Ein Kalenderblatt hat insgesamt 42 Tage für eine Optimale darstellung
+		$countDays = 0;																# Zähler um den nächsten Monat zu berechnen
+		$_POST['day'] = $this->dayNow = $dayNow   = intval(date("d", $time)); 		# Der Heutige Tag
+		$_POST['month'] = $this->monthNow = $monthNow = intval(date("m", $time));	# Der aktuelle Monat
+		$_POST['year'] = $this->yearNow = $yearNow  = intval(date("Y", $time));		# Das aktuelle Jahr
+		$aDaysNow = date("t", $time); 												# Anzahl der Tage in diesem Monat
 		
 		# Berechnung der letzten Tage der vorigen Monats auf dem aktuellen Monatsplatt
 		$aDaysLast = 		date("t", mktime(0,0,0,$monthNow-1,1,$yearNow)); 				# Anzahl der Tage im vorigem Monate
@@ -121,7 +121,7 @@ class kalender {
 	public function where($feld, $format="U"){
 		$startDate = date( $format, $this->startDate);
 		$endDate = date( $format, $this->endDate);
-		return $feld .">'".$startDate."' AND ". $feld ."<'".$endDate."'"; 
+		return $feld .">'".$this->startDate."' AND ". $feld ."<'".$this->endDate."'"; 
 	}
 	
 	public static function monthName(){
@@ -155,6 +155,16 @@ class kalender {
 		);
 		
 		return $weekDays;
+	}
+	
+	public function months(){
+		return db_sameKeyVal("
+			SELECT DISTINCT 
+				DATE_FORMAT(FROM_UNIXTIME(inv), '%m') AS month
+			FROM prefix_raid_raid
+			WHERE DATE_FORMAT(FROM_UNIXTIME(inv), '%Y')='".$this->yearNow."'
+			ORDER BY month ASC
+		");
 	}
 	
 	public static function years(){
@@ -203,12 +213,12 @@ class kalender {
 				<td class="Cdark" align="center" width="<?php echo $rowSize; ?>" colspan="7">
 				
 					<div class="buttonset kalenderNavigation hide" style="margin-bottom: 3px;">
-						<?php foreach( $month as $key => $value ):
+						<?php foreach( $this->months() as $key => $value ):
 						?><a 
 							href="index.php?raidlist-kalender&date=<?php echo $this->dayNow; ?>.<?php echo $key; ?>.<?php echo $this->yearNow; ?>" 
 							class="<?php echo ( $this->monthNow == $key ? 'ui-state-active' : 'ui-state-default'); ?>"
 							fancybox="kalender">
-								<?php echo $value; ?>
+								<?php echo $month[intval($value)]; ?>
 						</a><?php
 						endforeach;?>
 					</div>

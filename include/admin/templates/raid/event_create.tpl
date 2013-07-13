@@ -1,4 +1,4 @@
-<form id="standart" name="form" method="post" action="admin.php?raid-add">
+<form id="standart" name="form" method="post" action="admin.php?raid-createEvent">
 	<table width="50%" border="0" cellspacing="1" cellpadding="2" class='border'>
 	  <tr class='Chead' align="center"> 
 		<td>Status</td>

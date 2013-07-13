@@ -243,7 +243,6 @@ form#apply label.error { display: none; }
 }
 
 .status ol li{
-	height: 18px;
 }
 
 .status a{

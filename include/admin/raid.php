@@ -9,15 +9,18 @@ $smarty = new iSmarty();
 $tpl = new tpl ( 'raid/raid.htm',1 );
 
 switch($menu->get(1)){
-	case "add":
-		if( $_SESSION['authright'] >= $allgAr['addchar'] ) { exit("Sie habe nicht die N&ouml;tigen rechte!"); }
+	case "createEvent":
+		if( !permission($menu->get(1)) ) { exit("Sie habe nicht die N&ouml;tigen rechte!"); }
 		
+		arrPrint( 'Post werte', $_POST );
 		$res = db_query("SELECT start, begin, ende, sperre FROM prefix_raid_zeit WHERE id=".$_POST['time'].";");
 		$zeit = db_fetch_assoc( $res );
+		arrPrint( 'Zeiten', $zeit );
 		
 		list( $istd, $imin ) = explode(":", $zeit['start'] );
 		list( $pstd, $pmin ) = explode(":", $zeit['begin'] );
 		list( $estd, $emin ) = explode(":", $zeit['ende'] );
+		
 		
 		list($tag, $monat, $jahr ) = explode( ".", $_POST['startdate'] );
 		$tag = escape($tag, 'integer');
@@ -57,9 +60,9 @@ switch($menu->get(1)){
 			escape($_SESSION['authid'], "integer")."', '".
 			escape($_POST['zyklus'], 	"integer")."', '".
 			escape($_POST['startdate'], "string")."', '".
-			escape($_POST['enddate'], 	"string") ."');");
+			escape($_POST['enddate'], 	"string")."');");
 		}
-		
+		arrPrint( 'Query Status', $sqlStatus );
 		$raid->status(!in_array(0, $sqlStatus), 'createEvent', 5, array('count' => count($sqlStatus)));
 		$raid->setStatus(true);
 	break;
@@ -100,20 +103,41 @@ switch($menu->get(1)){
 		} 
 		exit();
 	break;
-	case "del":
-		if( permission('removeRaid') ){
-			db_query("DELETE FROM prefix_raid_raid WHERE id = '".$menu->get(2)."'");
-			db_query("DELETE FROM prefix_raid_anmeldung WHERE rid = '".$menu->get(2)."'");
-			exit();
+	case "removeEvent":
+		if( permission('removeEvent') ){
+			$sqlStatus = array();
+			$sqlStatus[] = db_query("DELETE FROM prefix_raid_raid WHERE id = '".escape($_POST['id'], 'integer')."'");
+			$sqlStatus[] = db_query("DELETE FROM prefix_raid_anmeldung WHERE rid = '".escape($_POST['id'], 'integer')."'");
+			$raid->status(!in_array(0, $sqlStatus), $menu->get(1));
+			$raid->setStatus(true);
 		}else{
 			exit('don\'t Premission<br>');
 		}
 	break;
-	case "delAll":
-		if( permission('removeRaid') ){
-			db_query("TRUNCATE prefix_raid_raid;");
-			db_query("TRUNCATE  prefix_raid_anmeldung;");
-			exit("Events & Anmeldungen wurden unwiederruflich gel&ouml;scht!");
+	case "removeEventsMulti":
+		if( permission($menu->get(1)) ){
+			$sqlStatus = array();
+			$res = db_query("SELECT id FROM prefix_raid_raid WHERE erstellt='".escape($_POST['erstellt'], 'integer')."'");
+			$replaceMessage['count'] = db_num_rows($res);
+			
+			$sqlStatus[] = db_query("DELETE FROM prefix_raid_raid WHERE erstellt= '".escape($_POST['erstellt'], 'integer')."'");
+			while( $row = db_fetch_assoc( $res )){
+				$sqlStatus[] = db_query("DELETE FROM prefix_raid_anmeldung WHERE rid = '".escape($row['id'], 'integer')."'");
+			}
+			arrPrint( __LINE__, $sqlStatus);
+			$raid->status(!in_array(0, $sqlStatus), $menu->get(1), 3000, $replaceMessage);
+			$raid->setStatus(true);
+		}else{
+			exit('don\'t Premission<br>');
+		}
+	break;
+	case "removeEvents":
+		if( permission('removeEvents') ){
+			$sqlStatus = array();
+			$sqlStatus[] = db_query("TRUNCATE prefix_raid_raid;");
+			$sqlStatus[] = db_query("TRUNCATE  prefix_raid_anmeldung;");
+			$raid->status(!in_array(0, $sqlStatus), $menu->get(1));
+			$raid->setStatus(true);
 		}else{
 			exit('don\'t Premission<br>');
 		}
@@ -128,7 +152,7 @@ switch($menu->get(1)){
 		$smarty->assign('status', db_html_options("SELECT id, statusmsg FROM prefix_raid_statusmsg WHERE sid='1'") );
 		$smarty->assign('leader', db_html_options("SELECT id, name FROM prefix_raid_charaktere ORDER BY rank ASC") );
 		$smarty->assign('gruppe', db_html_options("SELECT id, name FROM prefix_raid_gruppen WHERE name!='n/a' ORDER BY name ASC") );
-		$smarty->assign('inzen', db_html_options("SELECT id, name FROM prefix_raid_dungeons ORDER BY name ASC") );
+		$smarty->assign('inzen', db_html_options("SELECT id, CONCAT( size, ' | ', alias) AS name FROM prefix_raid_dungeons ORDER BY size, name ASC") );
 		$smarty->assign('time', allRowsFromQuery("SELECT id, info, CONCAT('Invite: ', start, ' Pull:',begin, ' Ende:', ende) AS time FROM prefix_raid_zeit ORDER BY info ASC") );
 		$smarty->display('raid/event_create.tpl');
 
@@ -206,14 +230,16 @@ switch($menu->get(1)){
 $design = new design ( 'Admins Area', 'Events', 2 );
 $design->header();
 
+$raid->setStatus(false);
 $kalender = new kalender;
 
-$smarty->assign('monatsnamen', $kalender->monthName());
+$smarty->assign('months', $kalender->months());
+$smarty->assign('monthName', $kalender->monthName());
 $smarty->assign('jahre', $kalender->years());
 $smarty->assign('events', getAssocArray( "
 	SELECT 
-		a.id, a.inv, a.gruppen as grp, a.multi,
-		b.name as inzen,
+		a.id, a.inv, a.gruppen as grp, a.multi, a.erstellt,
+		b.name as inzen, b.alias, b.size,
 		c.name AS grpname, 
 		d.statusmsg, d.color,
 		e.start, e.ende, e.begin, e.info,

@@ -4,6 +4,93 @@
 
 $(document).ready( function() {
 
+	// HTML <a> Funktionen
+	$('a[slide]').live('click', function(event){
+		event.preventDefault();
+		var $container = $(this).attr('slide');
+		$($container).slideDown(function(){
+			$(this).delay(10000).slideUp();
+		});
+	});
+		
+	$("a[json]").live('click', function(event){
+		event.preventDefault();
+		var json_url = $(this).attr('href');
+		var new_action = $(this).attr('json');
+		$.getJSON( json_url, function(json){
+			
+			$('form').attr('action', new_action).find('[type=submit]').val('Speichern');
+			
+			$.each( json, function( $key, $value )
+			{	$("[name="+$key+"]").val( $value );
+			});
+		});
+	});	
+
+	$("a[href*='#arrPrint']").live('click', function(){
+		$($(this).attr('href') + " div").slideToggle();
+	});
+	
+	$('a[fancybox=inline]').live('click', function(e){
+		e.preventDefault();
+		$.fancybox({
+			'href'				: $(this).attr('href'),
+			'width'				: '100%',
+			'height'			: '100%',
+			'autoScale'     	: true,
+			'transitionIn'		: 'none',
+			'transitionOut'		: 'none',
+			'type'				: 'inline',
+			onComplete			: function(){ jQueryActions(); }
+		});
+	});
+	
+	$("a[fancybox=kalender], a[href*='raidlist-kalender']").live('click', function(e){
+		e.preventDefault();
+		
+		var href = $(this).attr('href');
+		
+		if( res = !href.indexOf('admin.php') ){
+			href = href.replace('admin.php', 'index.php');
+			console.log(href, res);
+		}
+		
+		$.fancybox({
+			'href'				: href,
+			'showCloseButton'	: true,
+			'titlePosition' 	: 'inside',
+			'titleFormat'		: function(){ $('#kalenderNavigation').show().html() },
+			onComplete			: function(){ jQueryActions(); }
+		});
+	});
+	
+	$("a.group").fancybox({
+	  'transitionIn'	:	'elastic',
+	  'transitionOut'	:	'elastic',
+	  'speedIn'			:	600, 
+	  'speedOut'		:	1000,
+	  'titleShow'		: 	true,
+	  'titlePosition'	:	'over',
+	  'overlayShow'	:	false
+	});
+	
+	$('a[post]').live('click', function(event){
+		event.preventDefault();
+		$(this).dialogMsg("<img align='center' src='include/raidplaner/images/icons/loader.gif'>", 0, false);
+		var url = $(this).attr('href');
+		var post = $(this).attr('post');
+		var obj = $(this);
+		$.post( url, post, function(data)
+		{	$(this).dialogMsg(data, 3000, true);
+			obj.attrOptions(data);
+		});
+	});
+
+	
+	$('#filter input[name=month], #filter input[name=year]').live('click',function(){
+		$('.filter').submit();
+	});
+
 	$('[id^=colorpicker], [name*=farbe], [name*=Farbe]').each(function(){
 
 		var myColor = $(this);
@@ -48,27 +135,12 @@ $(document).ready( function() {
 		
 	});
 	
-	$("a[json]").live('click', function(event){
-		event.preventDefault();
-		var json_url = $(this).attr('href');
-		var new_action = $(this).attr('json');
-		$.getJSON( json_url, function(json){
-			
-			$('form').attr('action', new_action).find('[type=submit]').val('Speichern');
-			
-			$.each( json, function( $key, $value )
-			{	$("[name="+$key+"]").val( $value );
-			});
-		});
-	});
-	
 	$("select[name=img]").live('change', function(){
 		if( $(this).val() == 'upload' ){
 			$(this).after('<input type="file" name="imgUpload">');
 		}
 	});
 	
-
 	 $(".sortable tbody").sortable({ 
 			revert: true,
 			cursor: 'move',
@@ -116,9 +188,7 @@ $(document).ready( function() {
 		});
 	});
 	
-	$("a[href*='#arrPrint']").live('click', function(){
-		$($(this).attr('href') + " div").slideToggle();
-	});
+
 	
 	$("div[href]").css('cursor','pointer').click(function(event){
 		event.preventDefault();
@@ -168,14 +238,6 @@ $(document).ready( function() {
 	
 	var jQueryActions = function(){
 	
-		$('a[slide]').live('click', function(event){
-			event.preventDefault();
-			var $container = $(this).attr('slide');
-			$($container).slideDown(function(){
-				$(this).delay(10000).slideUp();
-			});
-		});
-	
 		$( "div[progressbar]").each( function(){
 			var value = parseInt($(this).attr('progressbar'));
 			var maxValue = parseInt($(this).attr('max'));
@@ -194,7 +256,6 @@ $(document).ready( function() {
 		
 		
 		$( "span#radio" ).buttonset();
-		
 		$( "div.buttonset" ).buttonset();
 		
 		$( "div.buttonset.kalender a:first" ).button({
@@ -208,7 +269,7 @@ $(document).ready( function() {
 			icons: { secondary: "ui-icon-circle-triangle-e" }
 		});
 		
-			// Datepicker
+		// Datepicker
 		$("#datepicker, #datepicker2").datepicker({
 				dateFormat: "dd.mm.yy",
 				dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
@@ -238,7 +299,7 @@ $(document).ready( function() {
 	jQueryActions();
 	
 	//Formulare
-	var ajaxForm = function(event){
+	var ajaxForm1 = function(event){
 		event.preventDefault();
 		var obj = $(this);
 		$(this).dialogMsg("<img align='center' src='include/raidplaner/images/icons/loader.gif'>", 0, false);
@@ -253,78 +314,27 @@ $(document).ready( function() {
 		$.post( url, res, cal, 'html');    
 	}
 	
-	// Schickt standart Formulare ab
-	$("form#standart").live('submit', ajaxForm);
-	
-	//KalenderInhalt
-	$("table .kalenderInhalt")
-		.live("mouseenter", function(){ $(this).find("#kalenderAction").fadeIn();})
-		.live("mouseleave", function(){ $(this).find("#kalenderAction").fadeOut();});
-		
-	//KalenderFancybox
-	$('a[kalender]').live("click", function(event){
+	var ajaxForm2 = function(event){
 		event.preventDefault();
-		var href = $(this).attr('href');
-		var post = $(this).attr('kalender');
-		$.fancybox({
-			href: href,
-			ajax : {
-				type	: "POST",
-				data	: post
-			}
-		});
-	});
-			
-	//fancybox
-	$('a[fancybox=inline]').live('click', function(e){
-		e.preventDefault();
-		$.fancybox({
-			'href'				: $(this).attr('href'),
-			'width'				: '100%',
-			'height'			: '100%',
-			'autoScale'     	: true,
-			'transitionIn'		: 'none',
-			'transitionOut'		: 'none',
-			'type'				: 'inline',
-			onComplete			: function(){ jQueryActions(); }
-		});
-	});
-	
-	$("a[fancybox=kalender], a[href*='raidlist-kalender']").live('click', function(e){
-		e.preventDefault();
-		$.fancybox({
-			'href'				: 'index.php?raidlist-kalender',
-			'showCloseButton'	: true,
-			'titlePosition' 	: 'inside',
-			'titleFormat'		: function(){ $('#kalenderNavigation').show().html() },
-			onComplete			: function(){ jQueryActions(); }
-		});
-	});
-	
-	//Fancybox Gruppen Bilder
-	$("a.group").fancybox({
-	  'transitionIn'	:	'elastic',
-	  'transitionOut'	:	'elastic',
-	  'speedIn'			:	600, 
-	  'speedOut'		:	1000,
-	  'titleShow'		: 	true,
-	  'titlePosition'	:	'over',
-	  'overlayShow'	:	false
-	});
-	
-	// <a> Tag zu einem $_POST
-	$('a[post]').live('click', function(event){
-		event.preventDefault();
-		$(this).dialogMsg("<img align='center' src='include/raidplaner/images/icons/loader.gif'>", 0, false);
-		var url = $(this).attr('href');
-		var post = $(this).attr('post');
 		var obj = $(this);
-		$.post( url, post, function(data)
-		{	$(this).dialogMsg(data, 3000, true);
-			obj.attrOptions(data);
-		});
-	});
+		$(this).dialogMsg("<img align='center' src='include/raidplaner/images/icons/loader.gif'>", 0, false);
+		var url = $(this).attr('action'); 						// Wohin die Daten gesendet werden!
+		var res = $(this).serialize();							// Formular Daten umwandeln!
+		var replace = $(this).attr('replace');
+		var cal = 	function(data){ 							// Callback
+						var newData = $(data).find(replace).html();
+						$(replace).html(newData);
+						jQueryActions();
+					}
+					
+		$.post( url, res, cal, 'html');    
+	}
 	
+	
+	// Schickt standart Formulare ab
+	$("form#standart").live('submit', ajaxForm1);
+	$("form#filter").live('submit', ajaxForm2);
+			
 	//Dialog Erstellen
 	$("<div id=\"dialog\"></div>").css({display: 'none'}).appendTo('body');
 	var $dialog = $("#dialog");
@@ -349,8 +359,7 @@ $(document).ready( function() {
 		
 		$dialog.dialog("open");
 	});
-	
-	// Confirm Dialog
+
 	$("a[confirm]").live("click", function(e){ 
 		e.preventDefault();
 		var obj = $(this);
@@ -387,6 +396,7 @@ $(document).ready( function() {
 		$dialog.dialog('open'); 
 	});
 	
+	//Zeit Funktionen
 	$("#stdWheel").live("mousewheel", function(event, delta){
 		event.preventDefault();
 		var now = parseInt($(this).val());
@@ -528,7 +538,7 @@ jQuery.fn.extend({
 		dialogMsg.dialog(
 		{	title: 'Status',
 			autoOpen: true,
-			width: 650,
+			width: 'auto',
 			minHeight: 50,
 			zIndex: 2000,
 			show: "fade",

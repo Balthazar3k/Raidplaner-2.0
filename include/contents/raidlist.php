@@ -24,28 +24,12 @@ switch( $menu->get(1) ):
 		
 		while( $row = db_fetch_assoc( $res ) ){
 			$kalender->fill($row['inv'], "
-				<b>".$row['alias']." um ".date("H:i",$row['inv'])."</b>
+				<b>".$row['alias'].$row['size']." um ".date("H:i",$row['inv'])."</b>
 				<br />
 				<span class=\"small\">Anmeldungen: ".$row['anmeld']."/".$row['size']."</span>
 			", array(
 				"style" => "border: 3px solid ".$row['color'].";"
 			));
-		}
-		
-		$res = db_query("
-			SELECT 
-				id, name, gebdatum
-			FROM prefix_user
-			WHERE
-				".$kalender->where('gebdatum', 'Y-m-d')."
-			ORDER BY id ASC
-		");
-		
-		#arrPrint(__LINE__, $kalender->getArray);
-		
-		while( $row = db_fetch_assoc( $res ) ){
-			arrPrint(__LINE__, $row);
-			$kalender->fill(strtotime($row['gebdatum']), "<b>".$row['name']."</b>");
 		}
 		
 		$kalender->set(820);

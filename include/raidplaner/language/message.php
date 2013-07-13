@@ -61,6 +61,15 @@ $raidMsg['removeImage'][1] = "L&ouml;schen von dem Bild \"{img}\" war erfolgreic
 $raidMsg['createEvent'][0] = "Beim erstellen eines Event's ist ein Fehler aufgetreten!";
 $raidMsg['createEvent'][1] = "{count} Event's wurden erfolgreich erstellt!";
 
+$raidMsg['removeEvent'][0] = "L&ouml;schen des Events war <b>nicht</b> erfolgreich!";
+$raidMsg['removeEvent'][1] = "L&ouml;schen des Events war erfolgreich!";
+
+$raidMsg['removeEventsMulti'][0] = "L&ouml;schen der eines Multi Events war <b>nicht</b> erfolgreich!";
+$raidMsg['removeEventsMulti'][1] = "L&ouml;schen der {count} Multi Events war erfolgreich!";
+
+$raidMsg['removeEvents'][0] = "L&ouml;schen aller Events & Anmeldungen war <b>nicht</b> erfolgreich!";
+$raidMsg['removeEvents'][1] = "L&ouml;schen des Events & Anmeldungen war erfolgreich!";
+
 $raidMsg['createDungeon'][0] = "Beim erstellen von \"{alias} - {name}\" ist ein Fehler aufgetreten!";
 $raidMsg['createDungeon'][1] = "Dungeon \"{alias} - {name}\" wurde erfolgreich erstellt!";
 
