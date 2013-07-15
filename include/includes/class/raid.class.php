@@ -107,15 +107,15 @@ class raidplaner {
 	private function checkRaidStatus(){
 		if( permission('editRaid') ){
 			### Raids auf Gültigkeit überprüfen
-			$res = db_query("SELECT id, ende FROM prefix_raid_raid WHERE statusmsg=1 AND ende<=".(time()-7200) );
+			$res = db_query("SELECT id, end FROM prefix_raid_raid WHERE status=1 AND end<=".(time()-7200) );
 			while( $row = db_fetch_assoc( $res )){
-				@db_query("UPDATE prefix_raid_raid SET statusmsg=17 WHERE id=".$row['id'] );
+				@db_query("UPDATE prefix_raid_raid SET status=17 WHERE id=".$row['id'] );
 			}
 		
 			### Wenn's ausstehende Raids gibt wird man Informiert.
-			$res = db_query("SELECT id, inv FROM prefix_raid_raid WHERE statusmsg=17");
+			$res = db_query("SELECT id, inv FROM prefix_raid_raid WHERE status=17");
 			while( $row = db_fetch_assoc( $res )){
-				$this->status(2, "Ausstehender Raid vom: <a href='admin.php?raid-edit-".$row['id']."' fancybox='inline'>". DateFormat("D d.m.Y H:i", $row['inv']) ."</a>", 10,__METHOD__);
+				$this->status(2, "Ausstehender Raid vom: <a href='admin.php?raid-update' fancybox='inline'>". DateFormat("D d.m.Y H:i", $row['inv']) ."</a>", 10,__METHOD__);
 			}
 		}
 	}
@@ -691,6 +691,7 @@ class raidplaner {
 		}
 		
 		$sql = "UPDATE `". $table ."` SET ". implode(", ", $val) ." WHERE `".$wKey."`='".$wValue."';";
+		arrPrint(__METHOD__, $sql);
 		return db_query($sql);
 	}
 

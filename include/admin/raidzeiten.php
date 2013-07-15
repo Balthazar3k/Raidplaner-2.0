@@ -7,28 +7,17 @@ switch( $menu->get(1) )
 	// NEUE ZEITEN ERSTELLEN
 	case "create":
 		if( !permission('createEventzeiten') ) { $status->close(); }
-		
-		arrPrint($_POST);
-		
-		$stat = true;
-		$stat = ( empty( $_POST['info'] ) ? $status->f("Das Feld \"Info\" ben&ouml;tigt eine Eingabe") : $stat );
-		$stat = ( empty( $_POST['start'] ) ? $status->f("Das Feld \"Invite\" ben&ouml;tigt eine Zeit") : $stat );
-		$stat = ( empty( $_POST['begin'] ) ? $status->f("Das Feld \"Pull\" ben&ouml;tigt eine Zeit") : $stat );
-		$stat = ( empty( $_POST['ende'] ) ? $status->f("Das Feld \"Ende\" ben&ouml;tigt eine Zeit") : $stat );
-		$stat = ( empty( $_POST['sperre'] ) ? $status->f("Das Feld \"Close\" ben&ouml;tigt eine Wert") : $stat );
-		
-		if( $stat == true ){
-			db_query("INSERT INTO prefix_raid_zeit (`info`, `start`, `begin`, `ende`, `sperre`) VALUES(
-					'".escape($_POST['info'] , "string")."',
-					'".escape($_POST['start'] , "string")."',
-					'".escape($_POST['begin'] , "string")."',
-					'".escape($_POST['ende'] , "string")."',
-					'".escape($_POST['sperre'] , "integer")."');");
+
+		$raid->status(db_query("INSERT INTO prefix_raid_zeit (`info`, `start`, `begin`, `ende`, `sperre`) VALUES(
+			'".escape($_POST['info'] , "string")."',
+			'".escape($_POST['start'] , "string")."',
+			'".escape($_POST['begin'] , "string")."',
+			'".escape($_POST['ende'] , "string")."',
+			'".escape($_POST['sperre'] , "integer")."');"));
 			
-			$status->t("neue Zeit wurde eingetragen");
-		}
-		
-		$status->close();
+
+		$raid->setStatus(true);
+
 	break;
 	
 	// ZEITEN BEARBEITEN

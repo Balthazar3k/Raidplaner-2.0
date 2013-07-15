@@ -1,4 +1,4 @@
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class='border'>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class='border ubuntu'>
 	<tr>
 		<th class="Chead" colspan="7">Event Optionen</th>
 	</tr>
@@ -19,7 +19,7 @@
 	<tr>
 		<th class="Chead" colspan="7">Event Filter: Monate & Jahre in denen Events sind!</th>
 	</tr>
-	<tbody id="eventsList" class="ubuntu">
+	<tbody id="eventsList">
 	<tr>
 		<td class="Cnorm" colspan="7">
 			<form id="filter" class="filter" action="admin.php?raid" method="post" replace="#eventsList">
@@ -42,16 +42,16 @@
 		</td>
 	</tr>
 	<tr>
-		<th class="Chead" colspan="7">alle {$events|count} Events in diesem Monat</th>
+		<td class="Chead" colspan="7">alle {$events|count} Events in diesem Monat</td>
 	</tr>
 	<tr>
-		<th class="Cdark" align="center">#id</th>
+		<th class="Cdark" align="center"></th>
+		<th class="Cdark" width="20">Options</th>
 		<th class="Cdark">Event Datum</th>
 		<th class="Cdark" align="center">Dungeon</th>
 		<th class="Cdark" align="center">Leader</th>
 		<th class="Cdark" align="center">Gruppe</th>
 		<th class="Cdark" align="center">Status</th>
-		<th class="Cdark" width="1">Options</th>
 	</tr>
 	{if $events|count=='0'}
 	<tr>
@@ -60,43 +60,81 @@
 	{else}
 	{foreach $events as $i}
 	<tr id="event{$i.id}">
-		<td class="Cnorm statusMsg" align="center" style="background-color: {$i.color}; text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.5);">{$i.id}:{$i.multi}</td>
-		<td class="Cnorm">
+		<td class="Cdark" align="center" style=""><b>{$i.alias}{$i.size}</b></td>
+		<td class="Cmite" style="max-width: 56px;">		
+			<ul class="automenu ubuntu">
+				<li>
+					<a href="#"><span class="ui-icon ui-icon-gear"></span>Optionen</a>
+					<ul>
+						<li>
+							<a href="admin.php?raid-update-{$i.id}" fancybox="inline"><span class="ui-icon ui-icon-person"></span>Spieler</a>
+						</li>
+						<li>
+							<a href="#"><span class="ui-icon ui-icon-gear"></span>Status</a>
+							<ul>
+								{debug}
+								{foreach from=$status key=key item=value}
+								<li class="{if $i.status == $key}ui-state-disabled{/if}"><a href="#"><span class="ui-icon ui-icon-triangle-1-e"></span>{$value}</a></li>
+								{/foreach}
+							</ul>
+						</li>
+						{perm authmod=removeEvent}
+							<li>
+								<a confirm="confirm" href="admin.php?raid-removeEvent" perm="id={$i.id}" remove="#event{$i.id}"><span class="ui-icon ui-icon-trash"></span>L&ouml;schen</a>
+								<confirm>
+									{status id=2}M&ouml;chten Sie den Event vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
+								</confirm>
+							</li>
+						{/perm}
+						
+						{if $i.cycle >= 1 }
+						{perm authmod=removeEventsMulti}
+						<li>
+							<a confirm="confirm" href="admin.php?raid-removeEventsMulti" perm="id={$i.id}&created={$i.created}"><span class="ui-icon ui-icon-trash"></span>alle L&ouml;schen</a>
+							<confirm>
+								{status id=2}M&ouml;chten Sie alle dazugeh&ouml;rigen Events vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
+							</confirm>
+						</li>
+						{/perm}
+						{/if}
+						
+						{perm authmod=updateEvent}
+						<li>
+							<a href="admin.php?raid-update-{$i.id}" fancybox="inline"><span class="ui-icon ui-icon-gear"></span>Bearbeiten</a>
+						</li>
+						{/perm}
+						
+					</ul>
+				</li>
+			</ul>
+		</td>
+		<td class="Cmite">
 			
-			<div style="float:left; width: 30px;"><b>{$i.inv|date_format:"%a"}</div> 
-			<div style="float:left;">{$i.inv|date_format:"%d.%m.%Y"}</b> <span class="ubuntu">({$i.info})</span></div>
-			<br style="clear: both;" />
-			<span class="small ubuntu">Invite: {$i.start} | Pull: {$i.begin} | Ende: {$i.ende}</span>
+			<div class="left">
+			<span style="width: 30px;"><b>{$i.inv|date_format:"%a"}</span> 
+			<span>{$i.inv|date_format:"%d.%m.%Y"}</b> {if isset($i.info)}<span class="ubuntu">({$i.info})</span>{/if}</span>
+			<br />
+			<span class="left small ubuntu">Invite: {$i.inv|date_format:"%H:%M"} | Pull: {$i.pull|date_format:"%H:%M"} | Ende: {$i.end|date_format:"%H:%M"}</span>
+			</div>
+			
+			<div class="right buttonset">
+				<a icon="ui-icon-person" href="#">
+						{$i.registrations}/{$i.size}
+				</a>
+				
+				<a onlyIcon="ui-icon-notice" href="#">info</a>
+			</div>
 			
 		</td>
-		<td class="Cnorm" align="center"><b>{$i.alias}{$i.size}</b><br />{$i.inzen}</td>
-		<td class="Cnorm" align="center">{$i.leader}</td>
-		<td class="Cnorm" align="center">{$i.grpname}</td>
-		<td class="Cnorm statusMsg" align="center" style="background-color: {$i.color}; text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.5);">{$i.statusmsg}</td>
-		<td class="Cnorm" align="center">
-			{perm authmod=removeEvent}
-				<a confirm="confirm" href="admin.php?raid-removeEvent" perm="id={$i.id}" remove="#event{$i.id}">{'cancel'|icon}</a>
-				<confirm>
-					{status id=2}M&ouml;chten Sie den Event vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
-				</confirm>
-			{/perm}
-			
-			{if $i.multi >= 1 }
-				{perm authmod=removeEventsMulti}
-					<a confirm="confirm" href="admin.php?raid-removeEventsMulti" perm="id={$i.id}&erstellt={$i.erstellt}"  tooltip="Alle dazugeh&ouml;rigen Events L&ouml;schen">{'cancel'|icon}</a>
-					<confirm>
-						{status id=2}M&ouml;chten Sie alle dazugeh&ouml;rigen Events vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
-					</confirm>
-				{/perm}
-			{/if}
-			
-			{'smart'|icon}
-		</td>
+		<td class="Cmite" align="center">{$i.nameDungeon} ({$i.size})</td>
+		<td class="Cmite" align="center">{$i.nameLeader}</td>
+		<td class="Cmite" align="center">{$i.nameGroup}</td>
+		<td class="statusMsg" align="center" style="background-color: {$i.color}; text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.5);">{$i.nameStatus}</td>
 	</tr>
 	{/foreach}
 	{/if}
 	</tbody>
 	<tr>
-		<td width="50%" class="Cmite" colspan="7"></td>
+		<td width="50%" class="Cdark" colspan="7"></td>
 	</tr>
 </table>

@@ -275,6 +275,39 @@ class kalender
 	var $arr = array();
 	var $size = 150;
 	
+	public static function years(){
+		return dbSameKeyValue("
+			SELECT DISTINCT 
+				DATE_FORMAT(FROM_UNIXTIME(inv), '%Y') AS year
+			FROM prefix_raid_raid
+			ORDER BY year ASC
+		");
+	}
+	
+	public static function monatsnamen($i=false, $x=false){
+		$i = ( $i ? $i : date('m') );
+		$monat = array(	
+			"01" => "Januar",
+			"02" => "Februar",
+			"03" => "M&auml;rz",
+			"04" => "April",
+			"05" => "Mai",
+			"06" => "Juni",
+			"07" => "Juli",
+			"08" => "August",
+			"09" => "September",
+			"10" => "Oktober",
+			"11" => "November",
+			"12" => "Dezember"
+		);
+		
+		if( $x ){
+			return $monat;
+		}else{
+			return $monat[ $i ];
+		}
+	}
+	
 	public function __construct($arr=NULL)
 	{	$this->arr = $arr;
 		//arrPrint( $arr );
@@ -357,24 +390,10 @@ class kalender
 		$heute = date("d");
 		$uts = mktime(0, 0, 0, $monat, $heute, $jahr);
 		
-		$monats_namen = array(	"00" => NULL,
-								"01" => "(1) Januar",
-								"02" => "(2) Februar",
-								"03" => "(3) M&auml;rz",
-								"04" => "(4) April",
-								"05" => "(5) Mai",
-								"06" => "(6) Juni",
-								"07" => "(7) Juli",
-								"08" => "(8) August",
-								"09" => "(9) September",
-								"10" => "(10) Oktober",
-								"11" => "(11) November",
-								"12" => "(12) Dezember" );
-		
 		$url = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_BASENAME) ."?". $_SERVER['QUERY_STRING'];
 		$set['prev'] = kLink("< Zur&uuml;ck", $url, "kalenderMonat=".$prev_monat."&kalenderJahr=".$prev_jahr);
 		$set['next'] = kLink("N&auml;chste >", $url, "kalenderMonat=".$next_monat."&kalenderJahr=".$next_jahr);
-		$set['monat'] = $monats_namen[$monat];
+		$set['monat'] = $this->monatsnamen($monat);
 		$set['jahr'] = $jahr;
 		$set['size'] = $this->size;
 		

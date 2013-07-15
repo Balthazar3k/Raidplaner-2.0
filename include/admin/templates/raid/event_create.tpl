@@ -10,7 +10,7 @@
 	  
 	  <tr class='Cmite'> 
 		<td align="center">
-			<select name="statusmsg" size="8">
+			<select name="status" size="8">
 				{html_options options=$status}
 			</select>
 		</td>
@@ -20,20 +20,21 @@
 			</select>
 		</td>
 		<td align="center">
-			<select name="gruppen" size="8">
+			<select name="group" size="8">
 				{html_options options=$gruppe}
 			</select>
 		</td>
 		<td align="center">
-			<select name="inzen" size="8">
+			<select name="dungeon" size="8">
 				{html_options options=$inzen}
 			 </select>
 		</td>
 		<td align="center">
 			<select name="time" size="8">
 			{foreach $time as $i}
-				<option value="{$i.id}" tooltip="{$i.time}">{$i.info}</option>
+				<option hide=".timeManual" value="{$i.id}" tooltip="{$i.time}">{$i.info}</option>
 			{/foreach}
+				<option toggle=".timeManual" value="0">Zeit Manuel festlegen</option>
 			 </select>
 		</td>
 	  </tr>
@@ -42,11 +43,19 @@
 		  <span id="radio">
 			{assign "multi" "0"}
 			{foreach from=$zyklus key=id item=val}
-		    <input id="radio{$id}" type="radio" name="zyklus" value="{$id}" {if $id==$multi}checked="checked"{/if} /><label for="radio{$id}">{$val}</label>
+		    <input id="radio{$id}" type="radio" name="cycle" value="{$id}" {if $id==$multi}checked="checked"{/if} /><label for="radio{$id}">{$val}</label>
 			{/foreach}
 	      </span>
-		  <span id="vonbis" style="display: none;">Vom </span><input id="datepicker" name="startdate" value="{"today"|strtotime|date_format:"d.m.Y"} " maxlength="10" size="12" />
-		  <span id="vonbis" style="display: none;"> bis zum <input id="datepicker2" name="enddate" value="" maxlength="10" size="12" /></span> <em>*</em>
+		  <span id="vonbis" style="display: none;">Vom </span><input id="datepicker" name="from" value="{"today"|strtotime|date_format:"d.m.Y"} " maxlength="10" size="12" />
+		  <span id="vonbis" style="display: none;"> bis zum <input id="datepicker2" name="to" value="" maxlength="10" size="12" /></span> <em>*</em>
+		</td>
+	  </tr>
+	  <tr class='Cnorm hide timeManual' tooltip="Sie k&ouml;nnen mit dem Mausrad die Zeit einstellen."> 
+		<td id="removeCode" colspan="6" style="padding-top: 6px;" align="center">
+			<input id="timeWheel" type="text" name="inv" value="18:00" size="5">
+			<input id="timeWheel" type="text" name="pull" value="18:15" size="5">
+			<input id="timeWheel" type="text" name="end" value="22:00" size="5">
+			<input id="intWheel" type="text" name="lock" value="2" size="2">
 		</td>
 	  </tr>
 	  <tr class='Cdark'> 

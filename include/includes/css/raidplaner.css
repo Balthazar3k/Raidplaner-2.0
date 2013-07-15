@@ -4,13 +4,19 @@
 .statusMsg{
 	color: #FFF;
 	font-weight: bold;
-	font-family: Ubuntu;
+	font-family: Ubuntu, Tahoma;
 	font-size: 16px;
 }
 
-.ubuntu, .ubuntu th, .ubuntu td{
-	font-family: Ubuntu;
+.ubuntu, .ubuntu th, .ubuntu td, .ubuntu span, .ubuntu li{
+	font-family: Ubuntu, Tahoma;
+	font-size: 12px!important;
 	text-shadow: 1px 1px 0 rgba( 255, 255, 255, 1.0);
+}
+
+ .ui-menu { 
+	width: 100px;
+	white-space: nowrap;
 }
 
 img{ border: none; }
@@ -71,11 +77,9 @@ form#apply label.error { display: none; }
 /* HTML-Formulare */
 [readonly=readonly] { opacity: 0.5; }
 #intWheel, #timeWheel { text-align: center; }
-#removeCode select{
-	display: none;
-}
+
 #standart, #standart select, .standart select
-{	font-family: Ubuntu;
+{	font-family: Ubuntu, Tahoma;
 	font-size: 12px;
 	text-align: left;
 }
@@ -130,7 +134,7 @@ form#apply label.error { display: none; }
 	border-radius: 20px;
 	
 	color: #FFF;
-	font-family: Ubuntu;
+	font-family: Ubuntu, Tahoma;
 	font-size: 20px;
 	
 	box-shadow: 1px 1px 3px #000;
@@ -145,7 +149,7 @@ form#apply label.error { display: none; }
 	margin-bottom: 3px;
 }
 
-.nr1, .nr2, .nr3, .nr4 { max-height: 84px; overflow: hidden; font-family: Ubuntu; float: left; }
+.nr1, .nr2, .nr3, .nr4 { max-height: 84px; overflow: hidden; font-family: Ubuntu, Tahoma; float: left; }
 .nr1{ width: 150px; text-align: center; line-height: 21px; color: #FFF; font-size: 14px;}
 .nr3{ line-height: 82px; margin-left: 20px; font-size: 30px; font-weight: bold; }
 .nr4{ width: 110px; text-align: right; float: right; color: #FFF; font-size: 14px; margin: 0 15px 0 5px; padding-top: 50px; }
@@ -166,7 +170,7 @@ form#apply label.error { display: none; }
 	padding-left: 180px; 
 	height: 116px;
 	line-height: 150px;
-	font-family: Ubuntu;
+	font-family: Ubuntu, Tahoma;
 	font-size: 40px;
 	font-weight: bold;
 }
@@ -229,7 +233,7 @@ form#apply label.error { display: none; }
 
 .status div{
 	font-size: 14px;
-	font-family: Ubuntu;
+	font-family: Ubuntu, Tahoma;
 	min-height: 25px;
 	line-height: 25px;
 	margin-bottom: 3px;
@@ -299,10 +303,10 @@ form#apply label.error { display: none; }
 	font-weight: bold; 
 	font-size: 16px; 
 	text-align: center; 
-	font-family: Ubuntu;
+	font-family: Ubuntu, Tahoma;
 }
 .rang-rechte-name {
 	margin-bottom: 2px; 
-	font-family: Ubuntu; 
+	font-family: Ubuntu, Tahoma; 
 	font-size: 13px; 
 }

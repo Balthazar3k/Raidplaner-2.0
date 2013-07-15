@@ -449,7 +449,9 @@ function getArray( $sql ){
 }
 
 function getRow( $sql ){
-	return db_fetch_assoc(db_query($sql));
+	$res = db_fetch_assoc(db_query($sql));
+	arrPrint( __FUNCTION__, $sql, $res );
+	return $res;
 }
 
 function getAssocArray( $sql ){
@@ -457,6 +459,8 @@ function getAssocArray( $sql ){
 	$res = db_query($sql);
 	while( $row = db_fetch_assoc( $res ) )
 		$newArray[] = $row;
+		
+	arrPrint(__FUNCTION__, $sql, $newArray );
 		
 	return $newArray;
 }
@@ -504,6 +508,22 @@ function zyklus( $option, $from, $to ){
 				return $dates;
 		break;
 	}
+}
+
+function autoInsertString( $array ){
+	$newArray = array();
+	
+	foreach( $array as $k => $v ){
+		if( is_int( $v ) ){
+			$newArray[] = $k.":i";
+		}elseif( is_string( $v ) && strlen( $v ) > 255 ){
+			$newArray[] = $k.":t";
+		}elseif( is_string( $v ) && strlen( $v ) < 255 ){
+			$newArray[] = $k.":s";
+		}
+	}
+	
+	return "'".implode("', '", $newArray)."'";
 }
 
 

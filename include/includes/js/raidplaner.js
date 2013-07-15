@@ -86,6 +86,17 @@ $(document).ready( function() {
 		});
 	});
 
+	$('[toggle]').live('click', function(event){
+		event.preventDefault();
+		var toggle = $(this).attr('toggle');
+		$(toggle).fadeToggle();
+	});
+	
+	$('[hide]').live('click', function(event){
+		event.preventDefault();
+		var hide = $(this).attr('hide');
+		$(hide).hide();
+	});
 	
 	$('#filter input[name=month], #filter input[name=year]').live('click',function(){
 		$('.filter').submit();
@@ -238,6 +249,8 @@ $(document).ready( function() {
 	
 	var jQueryActions = function(){
 	
+		$('#removeCode select[name=code]').remove();
+	
 		$( "div[progressbar]").each( function(){
 			var value = parseInt($(this).attr('progressbar'));
 			var maxValue = parseInt($(this).attr('max'));
@@ -253,10 +266,32 @@ $(document).ready( function() {
 			$("[name="+name+"]").val( $(this).val() );
 		});
 		
-		
+		$('.automenu').menu();
 		
 		$( "span#radio" ).buttonset();
-		$( "div.buttonset" ).buttonset();
+		$( "div.buttonset, td.buttonset" ).buttonset();
+		
+		$( "a[icon]" ).each(function(i){
+			var $thisIcon = $(this).attr('icon');
+			console.log( i, $thisIcon );
+			$(this).button({
+				icons: {
+					primary: $thisIcon
+				}
+			});
+		});
+		
+		$( "a[onlyIcon]" ).each(function(i){
+			var $thisIcon = $(this).attr('onlyIcon');
+			console.log( i, $thisIcon );
+			$(this).button({
+				text: 0,
+				icons: {
+					primary: $thisIcon
+				}
+			});
+		});
+		
 		
 		$( "div.buttonset.kalender a:first" ).button({
 			icons: { primary: "ui-icon-circle-triangle-w" }
