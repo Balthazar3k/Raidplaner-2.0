@@ -9,7 +9,7 @@
 ####
 ## 	
 
-class raidplaner {
+class raidplaner extends database {
 	public function __construct(){
 		arrPrint(__METHOD__, $_POST, $_SESSION);
 
@@ -109,7 +109,7 @@ class raidplaner {
 			### Raids auf Gültigkeit überprüfen
 			$res = db_query("SELECT id, end FROM prefix_raid_raid WHERE status=1 AND end<=".(time()-7200) );
 			while( $row = db_fetch_assoc( $res )){
-				@db_query("UPDATE prefix_raid_raid SET status=17 WHERE id=".$row['id'] );
+				@db_query("UPDATE prefix_raid_raid SET status=5 WHERE id=".$row['id'] );
 			}
 		
 			### Wenn's ausstehende Raids gibt wird man Informiert.
@@ -131,55 +131,7 @@ class raidplaner {
 		$extra = getArray('SELECT id AS `keys`, name AS `values` FROM prefix_raid_rang ORDER BY id ASC');
 		ilch_updateConfig('bewerberrang', count( $extra['keys'] )-1, json_encode($extra) );
 	}
-	
-	##
-	####
-	######
-	# LOG METHODEN
-	######
-	####
-	##
-	var $logFileName;
-	
-	public function log(){
-		$this->logFileName = 'log/' . date('Y-m-d');
-		// Überprüfen ob es den cache/log Ordner gibt
-		if( !is_dir( $this->cacheDir . "/log" ) ){
-			mkdir( $this->cacheDir . "/log" );
-			@chmod( $this->cacheDir . "/log", 0777);
-		}
 		
-		$logTime = time();
-		$args = func_get_args();
-		$log = $this->getCache($this->logFileName);
-		
-		foreach( $args as $k => $arg ){
-
-			if( is_array( $arg ) ){
-				ob_start();
-				
-					echo "<pre>";
-					var_dump( $arg );
-					echo "</pre>";
-					
-				$arg = ob_get_contents();
-				ob_end_clean();
-			}
-			
-			
-			$log = "[".date('d.m.Y H:i:s', $logTime). "|" . $_SESSION['authname'] ."]: ". $arg ."\n" . $log;
-		}
-		
-		$this->setCache($this->logFileName, $log);
-	}
-	
-	public function logToday(){
-		$this->logFileName = 'log/' . date('Y-m-d');
-		return $this->getCache($this->logFileName, true);
-	}
-	
-	
-	
 	##
 	####
 	######
@@ -188,7 +140,8 @@ class raidplaner {
 	####
 	##
 	public function mainCharakter($user = false){
-		return getRow("
+		global $db;
+		return $db->getRow("
 			SELECT 
 				a.id, a.user, a.name, a.rank, a.klassen,
 				b.rechte,
@@ -203,7 +156,8 @@ class raidplaner {
 	}
 	
 	public function mainCharaktere(){
-		return getArray("
+		global $db;
+		return $db->getArray("
 			SELECT 
 				a.id, a.user, a.name, a.rank,
 				b.rechte
@@ -426,9 +380,6 @@ class raidplaner {
 		
 		# Wenn Status Leer ist dann setze ihn auf 0
 		$status = ( $status == NULL ? 0 : $status );
-		
-		## Teste log
-		$this->log( $message . " \"" . $_SERVER['REQUEST_URI'] ."\"");
 		
 		$i = count( @$this->status[$status]['status'] );
 		

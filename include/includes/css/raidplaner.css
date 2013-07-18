@@ -30,8 +30,8 @@ img{ border: none; }
 
 /* Text */
 .small { font-size: 10px; }
-.shadoww{ text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.7); font-weight: bold; }
-.shadowb{ text-shadow: 1px 1px 0 rgba( 0, 0, 0, 0.7); font-weight: bold; }
+.shadoww{ text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.7); }
+.shadowb{ text-shadow: 1px 1px 0 rgba( 0, 0, 0, 0.7); }
 .red{ color: red; }
 .green{ color: green; }
 

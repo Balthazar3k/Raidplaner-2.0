@@ -79,6 +79,12 @@ $raidMsg['editDungeon'][1] = "Dungeon \"{alias} - {name}\" wurde erfolgreich ge&
 $raidMsg['removeDungeon'][0] = "Beim L&ouml;schen von \"{alias} - {name}\" ist ein Fehler aufgetreten!";
 $raidMsg['removeDungeon'][1] = "Dungeon \"{alias} - {name}\" wurde erfolgreich gel&ouml;scht!";
 
+$raidMsg['createStatus'][0] = "Beim erstellen des Status ist ein Fehler aufgetreten!";
+$raidMsg['createStatus'][1] = "Status wurden erfolgreich erstellt!";
+
+$raidMsg['editStatus'][0] = "Beim bearbeiten von einem Status ist ein Fehler aufgetreten!";
+$raidMsg['editStatus'][1] = "Status wurde erfolgreich ge&auml;ndert!";
+
 $raidMsg['regist'][0] = "beim Senden der Bewerbung ist ein Fehler aufgetreten, bitte versuchen Sie es sp&auml;ter erneut!";
 
 /* TEXTE */

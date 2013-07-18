@@ -99,4 +99,3 @@
 	</tr>
 </table>
 <br style="clear: both;" />
-{debug}

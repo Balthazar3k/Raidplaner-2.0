@@ -1,7 +1,5 @@
 <form id="standart" name="form" method="post" action="admin.php?raid-updateEvent">
-	<input type="hidden" name="id" value="{$event.id}">
-	<input type="hidden" name="zyklus" value="{$event.multi}">
-	<input type="hidden" name="erstellt" value="{$event.erstellt}">
+	<input type="hidden" name="created" value="{$event.created}">
 	<table width="50%" border="0" cellspacing="1" cellpadding="2" class='border'>
 	  <tr class='Chead' align="center"> 
 		<td>Status</td>
@@ -13,8 +11,8 @@
 	  
 	  <tr class='Cmite'> 
 		<td align="center">
-			<select name="statusmsg" size="8">
-				{html_options options=$status selected=$event.statusmsg}
+			<select name="status" size="8">
+				{html_options options=$status selected=$event.status}
 			</select>
 		</td>
 		<td align="center">
@@ -23,13 +21,13 @@
 			</select>
 		</td>
 		<td align="center">
-			<select name="gruppen" size="8">
-				{html_options options=$gruppe selected=$event.gruppen}
+			<select name="group" size="8">
+				{html_options options=$gruppe selected=$event.group}
 			</select>
 		</td>
 		<td align="center">
-			<select name="inzen" size="8">
-				{html_options options=$inzen selected=$event.inzen}
+			<select name="dungeon" size="8">
+				{html_options options=$inzen selected=$event.dungeon}
 			 </select>
 		</td>
 		<td align="center">
@@ -37,42 +35,46 @@
 			{foreach $time as $i}
 				<option hide=".timeManual" value="{$i.id}" tooltip="{$i.time}" {if $i.id==$event.time} selected="selected"{/if}>{$i.info}</option>
 			{/foreach}
-				<option toggle=".timeManual" value="0">Zeit Manuel festlegen</option>
+				<option toggle=".timeManual" value="0" {if 0==$event.time} selected="selected"{/if}>Zeit Manuel festlegen</option>
 			 </select>
 		</td>
 	  </tr>
-	  <tr class='Cmite'> 
+	  <tr class='Cnorm'> 
 		<td colspan="6">
-			<div class="left">
-				<input  value="Datum" maxlength="10" size="12" readonly="readonly" style="text-align: right;" />:
-				<input id="datepicker" name="startdate" value="{"today"|strtotime|date_format:"d.m.Y"} " maxlength="10" size="12" />
-			</div>
-			
-			<span id="radio" class="right">
-				<input type="radio" name="events" value="0" id="multi0" checked="checked" /><label for="multi0">nur diesen Event</label>
-				{if $event.multi >= 1 }<input type="radio" name="events" value="1" id="multi1" /><label for="multi1">alle Events aus der Serie</label>{/if}
-			</span>
+		  <span id="radio">
+			{assign "multi" "0"}
+			{foreach from=$zyklus key=id item=val}
+		    <input id="radio{$id}" type="radio" name="cycle" value="{$id}" {if $id==$event.cycle}checked="checked"{/if} /><label for="radio{$id}">{$val}</label>
+			{/foreach}
+	      </span>
+			{if $event.cycle >= 1}<span id="vonbis">Vom </span>{else}<span id="vonbis" style="display: none;">{/if}
+			<input id="datepicker" name="from" value="{$event.from}" maxlength="10" size="12" />
+			{if $event.cycle >= 1}
+				<span id="vonbis"> bis zum <input id="datepicker2" name="to" value="{$event.to}" maxlength="10" size="12" /></span>
+			{else}
+				<span id="vonbis" style="display: none;"> bis zum <input id="datepicker2" name="to" value="{$event.to}" maxlength="10" size="12" /></span>
+			{/if} <em>*</em>
 		</td>
 	  </tr>
 	  <tr class='Cnorm hide timeManual' tooltip="Sie k&ouml;nnen mit dem Mausrad die Zeit einstellen."> 
 		<td id="removeCode" colspan="6" style="padding-top: 6px;" align="center">
-			<input id="timeWheel" type="text" name="start" value="{$event.inv|date_format:'H:i'}" size="5">
-			<input id="timeWheel" type="text" name="begin" value="18:15" size="5">
-			<input id="timeWheel" type="text" name="ende" value="22:00" size="5">
-			<input id="intWheel" type="text" name="sperre" value="2" size="2">
+			<input id="timeWheel" type="text" name="inv" value="{$event.inv|date_format:"H:i"}" size="5">
+			<input id="timeWheel" type="text" name="pull" value="{$event.pull|date_format:"H:i"}" size="5">
+			<input id="timeWheel" type="text" name="end" value="{$event.end|date_format:"H:i"}" size="5">
+			<input id="intWheel" type="text" name="lock" value="{$event.lock}" size="2">
 		</td>
 	  </tr>
 	  <tr class='Cdark'> 
 		<td id="removeCode" colspan="6" style="padding-top: 6px;" align="center">{$bbcode}</td>
 	  </tr>
 	  <tr class='Cnorm'>
-		<td colspan="6"><textarea name="txt" cols="110" rows="8" id="txt"></textarea></td>
+		<td colspan="6"><textarea name="txt" cols="110" rows="8" id="txt">{$event.txt}</textarea></td>
 	  </tr>
 	  <tr class='Cdark'> 
 		<td colspan="6" align="center">
-		  <input type="submit" name="Submit" value="{$button}">
+		  <input type="submit" name="event" value="nur diesen Event">
+		  {if $event.to != '' && $event.cycle >= 1}<input type="submit" name="events" value="alle Events">{/if}
 		  <input type="reset" name="button" id="button" value="Zur&uuml;cksetzen" /></td>
 	  </tr>
 	</table>
 </form>
-{debug}

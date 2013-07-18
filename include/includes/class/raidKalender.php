@@ -124,6 +124,13 @@ class kalender {
 		return $feld .">'".$this->startDate."' AND ". $feld ."<'".$this->endDate."'"; 
 	}
 	
+	public function where02($feld){
+		$date = $this->getDate();
+		$startDate = mktime( 0, 0, 0, date('m', $date), 1, date('Y', $date));
+		$endDate = mktime( 0, 0, 0, date('m', $date), date('t', $date), date('Y', $date));
+		return $feld .">'".$startDate."' AND ". $feld ."<'".$endDate."'"; 
+	}
+	
 	public static function monthName(){
 		$monat = array(	
 			1 => "Januar",
@@ -158,7 +165,8 @@ class kalender {
 	}
 	
 	public function months(){
-		return db_sameKeyVal("
+		global $db;
+		return $db->sameKeyVal("
 			SELECT DISTINCT 
 				DATE_FORMAT(FROM_UNIXTIME(inv), '%m') AS month
 			FROM prefix_raid_raid
@@ -168,7 +176,8 @@ class kalender {
 	}
 	
 	public static function years(){
-		return db_sameKeyVal("
+		global $db;
+		return $db->sameKeyVal("
 			SELECT DISTINCT 
 				DATE_FORMAT(FROM_UNIXTIME(inv), '%Y') AS year
 			FROM prefix_raid_raid

@@ -1,6 +1,7 @@
 <?php
 class database {
 	
+	var $sql = array();
 	var $sessionKey = 'duplicate';
 	var $results = array();
 	var $timer;
@@ -14,6 +15,8 @@ class database {
 		
 	}
 	
+	## Query, wenn 2tes Argument "true" kann die SQL nur einmal ausgeführt werden.
+	## Query, wenn 2tes Argument "false" kann die SQL mehrfach ausgeführt werden.
 	public function query( $sql, $option=false ){
 		# Wenn zweites Argument "true" und noch nicht ausgeführt wurde, erstellen!
 		if( $option && !$this->is_duplicate( $sql ) ){
@@ -23,7 +26,6 @@ class database {
 		}
 		
 		if( !$option && !$this->is_duplicate( $sql ) ){
-			#arrPrint(__METHOD__, 'test2', $sql, $this->is_duplicate( $sql ));
 			return db_query( $sql );
 		}
 		
@@ -91,6 +93,36 @@ class database {
 			$res = array();
 			while( $row = mysqli_fetch_array( $i ) ){
 				$res[$row[0]] = $row[1];
+			}
+			
+			$this->log(__METHOD__, $sql, $res);
+			return $res;
+		}
+	}
+	
+	# eignet sich für selects
+	function sameKeyVal( $sql, $option=false ){
+		if( $i = db_query( $sql ) ){
+			$res = array();
+			while( $row = mysqli_fetch_array( $i ) ){
+				$res[$row[0]] = $row[0];
+			}
+			$this->log(__METHOD__, $sql, $res);
+			return $res;
+		}
+	}
+
+	function getArray( $sql ){
+		if( $i = db_query( $sql ) ){
+			$i = 0;
+			$res = array();
+			
+			while( $row = db_fetch_assoc($i) ){
+				foreach( $row as $key => $value ){
+					$res[$key][$i] = $value;
+				}
+				
+				$i++;
 			}
 			
 			$this->log(__METHOD__, $sql, $res);

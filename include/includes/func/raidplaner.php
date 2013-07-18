@@ -1,10 +1,11 @@
 <?php
 ### b3k_func.php Copyright: 2007/2008 edit 2009, 2012 By: Balthazar3k.de
-
+require_once('include/includes/class/database.class.php');
 require_once('include/includes/class/raid.class.php');
 require_once('include/includes/class/raidKalender.php');
 require_once('include/raidplaner/language/message.php');
 
+$db = new database();
 $raid = new raidplaner();
 
 function copyright(){
@@ -282,23 +283,29 @@ function klassenSpz( $id, $s1=FALSE, $s2=FALSE ){
 	return $kspz;
 }
 
-function hex2rgba($color, $alpha){
+function hex2rgba($color, $alpha=1.0, $modi=false){
+	$hex = str_replace('#', '', $hex);
+	$r = $g = $b = 0;
 
-    if ($color[0] == '#')
-        $color = substr($color, 1);
+	switch(strlen($hex)){
+		case 3:
+			list($r, $g, $b) = str_split($hex);
+			$r = hexdec($r.$r);
+			$g = hexdec($g.$g);
+			$b = hexdec($b.$b);
+		break;
+		
+		case 6:
+			list($r1, $r2, $g1, $g2, $b1, $b2) = str_split($hex);
+			$r = hexdec($r1.$r2);
+			$g = hexdec($g1.$g2);
+			$b = hexdec($b1.$b2);
+		break;
+	default:
+		break;
+	}
 
-    if (strlen($color) == 6)
-        list($r, $g, $b) = array($color[0].$color[1],
-                                 $color[2].$color[3],
-                                 $color[4].$color[5]);
-    elseif (strlen($color) == 3)
-        list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
-    else
-        return false;
-
-    $r = hexdec($r); $g = hexdec($g); $b = hexdec($b);
-
-    return array('r' => $r, 'g' => $g, 'b' => $b, 'rgba' => 'rgba( '. $r . ', '. $g .', '. $b .', '. $alpha .' )'  );
+	return 'rgba('.$r.', '.$g.', '.$b.', '.$alpha.')';
 }
 
 function rgb2hex($r, $g=-1, $b=-1){
@@ -414,57 +421,6 @@ function array_transform( $arr ){
 	return $newArray;
 }
 
-function db_sameKeyVal( $sql ){
-	$newArray = array();
-	$res = db_query( $sql );
-	while( $row = mysqli_fetch_array( $res ) ){
-		$newArray[$row[0]] = $row[0];
-	}
-	return $newArray;
-}
-
-function db_html_options( $sql ){
-	$newArray = array();
-	$res = db_query( $sql );
-	while( $row = mysqli_fetch_array( $res ) ){
-		$newArray[$row[0]] = $row[1];
-	}
-	//arrPrint(__FUNCTION__, $newArray);
-	return $newArray;
-}
-
-function getArray( $sql ){
-	$i = 0;
-	$newArray = array();
-	$res = db_query( $sql );
-	while( $row = db_fetch_assoc($res) ){
-		foreach( $row as $key => $value ){
-			$newArray[$key][$i] = $value;
-		}
-		
-		$i++;
-	}
-	
-	return $newArray;
-}
-
-function getRow( $sql ){
-	$res = db_fetch_assoc(db_query($sql));
-	arrPrint( __FUNCTION__, $sql, $res );
-	return $res;
-}
-
-function getAssocArray( $sql ){
-	$newArray = array();
-	$res = db_query($sql);
-	while( $row = db_fetch_assoc( $res ) )
-		$newArray[] = $row;
-		
-	arrPrint(__FUNCTION__, $sql, $newArray );
-		
-	return $newArray;
-}
-
 function ilch_updateConfig($schl, $wert, $typextra = NULL){
 	global $raid;
 	$nowMsg = array("BattleNetAccesses");
@@ -524,6 +480,27 @@ function autoInsertString( $array ){
 	}
 	
 	return "'".implode("', '", $newArray)."'";
+}
+
+function jQueryMenu( $array ){
+	$html = '';
+	if( is_array( $array ) ){
+		$html .= "<ul class=\"automenu\">\n";
+
+	
+		foreach( $array as $k => $v ){
+				if( is_array( $v ) ){
+					$html .= "<li><a href=\"#\">".$k."</a>".jQueryMenu( $v )."</li>";
+				}else{
+					$html .= "<li><a href=\"".$v."\">".$k."</a>".jQueryMenu( $v )."</li>";
+				}
+		}
+	
+
+		$html .= "</ul>";
+	}
+	
+	return $html;
 }
 
 

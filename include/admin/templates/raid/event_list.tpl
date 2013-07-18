@@ -72,7 +72,7 @@
 						<li>
 							<a href="#"><span class="ui-icon ui-icon-gear"></span>Status</a>
 							<ul>
-								{debug}
+								
 								{foreach from=$status key=key item=value}
 								<li class="{if $i.status == $key}ui-state-disabled{/if}"><a href="#"><span class="ui-icon ui-icon-triangle-1-e"></span>{$value}</a></li>
 								{/foreach}
@@ -129,7 +129,7 @@
 		<td class="Cmite" align="center">{$i.nameDungeon} ({$i.size})</td>
 		<td class="Cmite" align="center">{$i.nameLeader}</td>
 		<td class="Cmite" align="center">{$i.nameGroup}</td>
-		<td class="statusMsg" align="center" style="background-color: {$i.color}; text-shadow: 1px 1px 0px rgba( 255, 255, 255, 0.5);">{$i.nameStatus}</td>
+		<td class="statusMsg" align="center" style="{$i.style}">{$i.nameStatus}</td>
 	</tr>
 	{/foreach}
 	{/if}

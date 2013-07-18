@@ -81,8 +81,8 @@ $raidMenuRechteSQL = "
 
 require_once('include/includes/class/iSmarty.php');
 $smarty = new iSmarty();
-$smarty->assign('data', allRowsFromQuery($raidRechteSQL) );
-$smarty->assign('menu', db_sameKeyVal($raidMenuRechteSQL));
+$smarty->assign('data', $raid->getRows($raidRechteSQL) );
+$smarty->assign('menu', $raid->sameKeyVal($raidMenuRechteSQL));
 $smarty->display('raid/raidrecht.tpl');
 
 copyright();

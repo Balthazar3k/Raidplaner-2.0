@@ -23,7 +23,7 @@ switch($menu->get(1)){
 		$raid->setStatus(true);
 	break;
 	case 'jsonData':
-		exit(json_encode(getRow("SELECT * FROM prefix_raid_dungeons WHERE id='".$menu->get(2)."' LIMIT 1")));
+		exit(json_encode($raid->getRow("SELECT * FROM prefix_raid_dungeons WHERE id='".$menu->get(2)."' LIMIT 1")));
 	break;
 }
 

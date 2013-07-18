@@ -5,18 +5,18 @@ $kalender = new kalender;
 
 switch( $menu->get(1) ):
 	case 'kalender':
-		$res = db_query( "	
+		$res = $db->query( "	
 			SELECT 
-				a.id, a.inv, a.gruppen as grp, a.multi,
-				b.alias, b.size, b.name as dungeon,
-				c.name AS grpname, 
-				d.statusmsg, d.color,
+				a.id, a.inv, a.group AS groupID, a.cycle,
+				b.alias, b.name as dungeonName, b.size, 
+				c.name AS groupName, 
+				d.status AS statusName, d.color, d.style,
 				f.name as leader, 
-				(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as anmeld
+				(SELECT COUNT(x.id) FROM prefix_raid_anmeldung as x WHERE x.rid = a.id) as registrations
 			FROM prefix_raid_raid AS a 
-				LEFT JOIN prefix_raid_dungeons AS b ON a.inzen = b.id
-				LEFT JOIN prefix_raid_gruppen AS c ON a.gruppen = c.id
-				LEFT JOIN prefix_raid_statusmsg AS d ON a.statusmsg = d.id 
+				LEFT JOIN prefix_raid_dungeons AS b ON a.dungeon = b.id
+				LEFT JOIN prefix_raid_gruppen AS c ON a.group = c.id
+				LEFT JOIN prefix_raid_status AS d ON a.status = d.id 
 				LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
 			WHERE ".$kalender->where("a.inv")."
 			ORDER BY d.id, a.inv  ASC
@@ -24,9 +24,10 @@ switch( $menu->get(1) ):
 		
 		while( $row = db_fetch_assoc( $res ) ){
 			$kalender->fill($row['inv'], "
+				<div style=\"".$row['style']."\">".$row['statusName']."</div>
 				<b>".$row['alias'].$row['size']." um ".date("H:i",$row['inv'])."</b>
 				<br />
-				<span class=\"small\">Anmeldungen: ".$row['anmeld']."/".$row['size']."</span>
+				<span class=\"small\">Anmeldungen: ".$row['registrations']."/".$row['size']."</span>
 			", array(
 				"style" => "border: 3px solid ".$row['color'].";"
 			));

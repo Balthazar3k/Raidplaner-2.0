@@ -19,7 +19,7 @@ $(document).ready( function() {
 		var new_action = $(this).attr('json');
 		$.getJSON( json_url, function(json){
 			
-			$('form').attr('action', new_action).find('[type=submit]').val('Speichern');
+			$('form').attr('action', new_action).find('[type=submit]').css({border: '3px solid red'}).val('Speichern');
 			
 			$.each( json, function( $key, $value )
 			{	$("[name="+$key+"]").val( $value );
@@ -109,7 +109,7 @@ $(document).ready( function() {
 		$(this).ColorPicker({
 
 			onChange: function(hsb, hex, rgb, el) {
-				$( myColor ).val('#' + hex).css({ border: '5px solid #' + hex, borderRadius: '5px' });
+				$( myColor ).val('#' + hex).css({ borderRight: '30px solid #' + hex, borderRadius: '5px' });
 			},
 			
 			onBeforeShow: function (hex) {
