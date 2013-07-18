@@ -1,40 +1,41 @@
 <?php
 class database {
+	
 	var $sessionKey = 'duplicate';
 	var $results = array();
+	var $timer;
 	
 	public function __construct(){
-		if( isset( $_SESSION ) ){
-			$_SESSION[$this->sessionKey] = array();
-		}else{
-			exit('no session found, on line:' __LINE__);
+		$this->timer = microtime();
+		$this->resetSession();
+		if( !isset( $_SESSION ) ){
+			exit('no session found, on line:'. __LINE__);
 		}
+		
 	}
 	
 	public function query( $sql, $option=false ){
 		# Wenn zweites Argument "true" und noch nicht ausgeführt wurde, erstellen!
-		if( $option == true && !$this->is_duplicate( $sql ) ){
+		if( $option && !$this->is_duplicate( $sql ) ){
+			#arrPrint(__METHOD__, 'test1', $sql, $this->is_duplicate( $sql ));
 			$this->set( $sql );
 			return db_query( $sql );
 		}
 		
-		if( $option == false && $this->is_duplicate( $sql ) ){
+		if( !$option && !$this->is_duplicate( $sql ) ){
+			#arrPrint(__METHOD__, 'test2', $sql, $this->is_duplicate( $sql ));
 			return db_query( $sql );
 		}
 		
-		
+		return false;
 	}
 	
 	public function is_duplicate( $sql ){
-		if( is_array( $_SESSION[$this->sessionKey] ) ){
-			return in_array( $this->lock( $sql ), $_SESSION[$this->sessionKey] );
-		}else{
-			exit('no session found, on line:' __LINE__);
-		}
+		return (isset( $_SESSION[$this->sessionKey][$this->lock( $sql )] ) ? true : false );
 	}
 	
 	public function set( $sql ){
-		$_SESSION[$this->sessionKey][] = $this->lock( $sql );
+		$_SESSION[$this->sessionKey][$this->lock( $sql )] = ( is_admin() ? $sql : 0 );
 	}
 	
 	public function lock( $sql ){
@@ -42,29 +43,63 @@ class database {
 	}
 	
 	public function log( $method, $sql, $res ){
-		$this->results[$method] = array(
+		if( isset( $this->results[$method] ) && !is_array( $this->results[$method] ) ){ 
+			$this->results[$method] = array(); 
+		}
+			
+		$this->results[$method][] = array(
 			'lockkey' => $this->lock( $sql ),
-			'locked' = $this->is_duplicate( $sql ),
+			'locked' => ( $this->is_duplicate( $sql ) ? 'Yes' : 'No' ),
+			'timer' => round(microtime()-$this->timer, 2) . ' sec',
+			'time' => date('H:i:s'),
 			'query' => $sql,
-			'result' = $res
+			'result' => $res
 		);
+	}
+	
+	public function resetSession(){
+		if( isset($_REQUEST['resetSession']) && is_admin() ){
+			$_SESSION[$this->sessionKey] = array();
+		}
 	}
 	
 	#---------------------------------------------------------------------#
 	
 	public function getRow( $sql, $option=false ){
-		$res = db_fetch_assoc( $this->query( $sql, $option ) );
-		$this->log(__METHOD__, $sql, $res);
-		return $res;
+		if( $i = $this->query( $sql, $option ) ){
+			$res = db_fetch_assoc( $i );
+			$this->log(__METHOD__, $sql, $res);
+			return $res;
+		}
 	}
 	
 	public function getRows( $sql, $option=false ){
+		if( $i = $this->query( $sql, $option ) ){
+			$res = array();
+			while( $row = db_fetch_assoc( $i ) ){
+				$res[]=$row;
+			}
+			
+			$this->log(__METHOD__, $sql, $res);
+			return $res;
+		}
 	}
 	
+	# eignet sich für selects
 	public function simpleArray( $sql, $option=false ){
+		if( $i = $this->query( $sql, $option ) ){
+			$res = array();
+			while( $row = mysqli_fetch_array( $i ) ){
+				$res[$row[0]] = $row[1];
+			}
+			
+			$this->log(__METHOD__, $sql, $res);
+			return $res;
+		}
 	}
 	
 	public function result(){
+		arrPrint('database', $_SESSION[$this->sessionKey], $this->results );
 	}
 	
 }
