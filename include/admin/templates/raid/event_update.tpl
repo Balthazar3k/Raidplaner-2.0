@@ -42,18 +42,8 @@
 	  <tr class='Cnorm'> 
 		<td colspan="6">
 		  <span id="radio">
-			{assign "multi" "0"}
-			{foreach from=$zyklus key=id item=val}
-		    <input id="radio{$id}" type="radio" name="cycle" value="{$id}" {if $id==$event.cycle}checked="checked"{/if} /><label for="radio{$id}">{$val}</label>
-			{/foreach}
 	      </span>
-			{if $event.cycle >= 1}<span id="vonbis">Vom </span>{else}<span id="vonbis" style="display: none;">{/if}
 			<input id="datepicker" name="from" value="{$event.from}" maxlength="10" size="12" />
-			{if $event.cycle >= 1}
-				<span id="vonbis"> bis zum <input id="datepicker2" name="to" value="{$event.to}" maxlength="10" size="12" /></span>
-			{else}
-				<span id="vonbis" style="display: none;"> bis zum <input id="datepicker2" name="to" value="{$event.to}" maxlength="10" size="12" /></span>
-			{/if} <em>*</em>
 		</td>
 	  </tr>
 	  <tr class='Cnorm hide timeManual' tooltip="Sie k&ouml;nnen mit dem Mausrad die Zeit einstellen."> 
@@ -72,8 +62,7 @@
 	  </tr>
 	  <tr class='Cdark'> 
 		<td colspan="6" align="center">
-		  <input type="submit" name="event" value="nur diesen Event">
-		  {if $event.to != '' && $event.cycle >= 1}<input type="submit" name="events" value="alle Events">{/if}
+		  <input type="submit" name="event" value="update Event">
 		  <input type="reset" name="button" id="button" value="Zur&uuml;cksetzen" /></td>
 	  </tr>
 	</table>

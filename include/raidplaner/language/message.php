@@ -85,6 +85,9 @@ $raidMsg['createStatus'][1] = "Status wurden erfolgreich erstellt!";
 $raidMsg['editStatus'][0] = "Beim bearbeiten von einem Status ist ein Fehler aufgetreten!";
 $raidMsg['editStatus'][1] = "Status wurde erfolgreich ge&auml;ndert!";
 
+$raidMsg['changeStatus'][0] = "Beim &auml;ndern vom Status ist ein Fehler aufgetreten!";
+$raidMsg['changeStatus'][1] = "Status wurde erfolgreich ge&auml;ndert!";
+
 $raidMsg['regist'][0] = "beim Senden der Bewerbung ist ein Fehler aufgetreten, bitte versuchen Sie es sp&auml;ter erneut!";
 
 /* TEXTE */

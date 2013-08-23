@@ -204,14 +204,25 @@ switch($menu->get(1)){
 
 		exit();
 	break;
+	
+	case "changeStatus":
+		if(!permission($menu->get(1))){ $raid->status(false, 'noperm', 'exit'); }
+		
+		$eventID = escape($menu->get(2), 'integer');
+		$statusID = escape($menu->get(3), 'integer');
+		
+		$raid->status( $db->query("UPDATE prefix_raid_raid SET status='".$statusID."' WHERE id='".$eventID."'", false), $menu->get(1));
+	break;
 }
 
-$design = new design ( 'Admins Area', 'Events', 2 );
+$kalender = new kalender;
+
+$design = new design ( 'Admins Area', 'Events vom ' . date("m.Y", $kalender->getDate()), 2 );
 $design->header();
 
 $raid->setStatus(false);
-$kalender = new kalender;
 
+$smarty->assign('kalenderDate', $kalender->getDate());
 $smarty->assign('months', $kalender->months());
 $smarty->assign('monthName', $kalender->monthName());
 $smarty->assign('jahre', $kalender->years());
@@ -238,5 +249,6 @@ $smarty->assign('events', $db->getRows( "
 $smarty->display('raid/event_list.tpl');
 
 copyright();
+
 $design->footer();
 ?>

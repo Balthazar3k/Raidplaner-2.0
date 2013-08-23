@@ -61,7 +61,7 @@
 	{foreach $events as $i}
 	<tr id="event{$i.id}">
 		<td class="Cdark" align="center" style=""><b>{$i.alias}{$i.size}</b></td>
-		<td class="Cmite" style="max-width: 56px;">		
+		<td class="Cmite">		
 			<ul class="automenu ubuntu">
 				<li>
 					<a href="#"><span class="ui-icon ui-icon-gear"></span>Optionen</a>
@@ -74,7 +74,7 @@
 							<ul>
 								
 								{foreach from=$status key=key item=value}
-								<li class="{if $i.status == $key}ui-state-disabled{/if}"><a href="#"><span class="ui-icon ui-icon-triangle-1-e"></span>{$value}</a></li>
+								<li class="{if $i.status == $key}ui-state-disabled{/if}"><a href="admin.php?raid-changeStatus-{$i.id}-{$key}&date={$kalenderDate|date_format:'d.m.Y'}"><span class="ui-icon ui-icon-triangle-1-e"></span>{$value}</a></li>
 								{/foreach}
 							</ul>
 						</li>
