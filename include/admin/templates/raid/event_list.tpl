@@ -61,52 +61,54 @@
 	{foreach $events as $i}
 	<tr id="event{$i.id}">
 		<td class="Cdark" align="center" style=""><b>{$i.alias}{$i.size}</b></td>
-		<td class="Cmite">		
-			<ul class="automenu ubuntu">
-				<li>
-					<a href="#"><span class="ui-icon ui-icon-gear"></span>Optionen</a>
-					<ul>
-						<li>
-							<a href="admin.php?raid-update-{$i.id}" fancybox="inline"><span class="ui-icon ui-icon-person"></span>Spieler</a>
-						</li>
-						<li>
-							<a href="#"><span class="ui-icon ui-icon-gear"></span>Status</a>
-							<ul>
-								
-								{foreach from=$status key=key item=value}
-								<li class="{if $i.status == $key}ui-state-disabled{/if}"><a href="admin.php?raid-changeStatus-{$i.id}-{$key}&date={$kalenderDate|date_format:'d.m.Y'}"><span class="ui-icon ui-icon-triangle-1-e"></span>{$value}</a></li>
-								{/foreach}
-							</ul>
-						</li>
-						{perm authmod=removeEvent}
+		<td class="Cmite" width="50">		
+			<div id="menuStyle" style="width: 55px;">
+				<ul class="automenu ubuntu">
+					<li>
+						<a href="#"><span class="ui-icon ui-icon-gear"></span>Optionen</a>
+						<ul>
 							<li>
-								<a confirm="confirm" href="admin.php?raid-removeEvent" perm="id={$i.id}" remove="#event{$i.id}"><span class="ui-icon ui-icon-trash"></span>L&ouml;schen</a>
+								<a href="admin.php?raid-update-{$i.id}" fancybox="inline"><span class="ui-icon ui-icon-person"></span>Spieler</a>
+							</li>
+							<li>
+								<a href="#"><span class="ui-icon ui-icon-gear"></span>Status</a>
+								<ul>
+									
+									{foreach $status as $s}
+									<li class="{if $i.status == $s.id}ui-state-disabled{/if}"><a href="admin.php?raid-changeStatus-{$i.id}-{$s.id}&date={$kalenderDate|date_format:'d.m.Y'}"><span class="ui-icon ui-icon-triangle-1-e"></span>{$s.status}</a></li>
+									{/foreach}
+								</ul>
+							</li>
+							{perm authmod=removeEvent}
+								<li>
+									<a confirm="confirm" href="admin.php?raid-removeEvent" perm="id={$i.id}" remove="#event{$i.id}"><span class="ui-icon ui-icon-trash"></span>L&ouml;schen</a>
+									<confirm>
+										{status id=2}M&ouml;chten Sie den Event vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
+									</confirm>
+								</li>
+							{/perm}
+							
+							{if $i.cycle >= 1 }
+							{perm authmod=removeEventsMulti}
+							<li>
+								<a confirm="confirm" href="admin.php?raid-removeEventsMulti" perm="id={$i.id}&created={$i.created}"><span class="ui-icon ui-icon-trash"></span>alle L&ouml;schen</a>
 								<confirm>
-									{status id=2}M&ouml;chten Sie den Event vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
+									{status id=2}M&ouml;chten Sie alle dazugeh&ouml;rigen Events vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
 								</confirm>
 							</li>
-						{/perm}
-						
-						{if $i.cycle >= 1 }
-						{perm authmod=removeEventsMulti}
-						<li>
-							<a confirm="confirm" href="admin.php?raid-removeEventsMulti" perm="id={$i.id}&created={$i.created}"><span class="ui-icon ui-icon-trash"></span>alle L&ouml;schen</a>
-							<confirm>
-								{status id=2}M&ouml;chten Sie alle dazugeh&ouml;rigen Events vom {$i.inv|date_format:"%d.%m.%Y"} ({$i.info}) wirklich L&ouml;schen?{/status}
-							</confirm>
-						</li>
-						{/perm}
-						{/if}
-						
-						{perm authmod=updateEvent}
-						<li>
-							<a href="admin.php?raid-update-{$i.id}" fancybox="inline"><span class="ui-icon ui-icon-gear"></span>Bearbeiten</a>
-						</li>
-						{/perm}
-						
-					</ul>
-				</li>
-			</ul>
+							{/perm}
+							{/if}
+							
+							{perm authmod=updateEvent}
+							<li>
+								<a href="admin.php?raid-update-{$i.id}" fancybox="inline"><span class="ui-icon ui-icon-gear"></span>Bearbeiten</a>
+							</li>
+							{/perm}
+							
+						</ul>
+					</li>
+				</ul>
+			</div>
 		</td>
 		<td class="Cmite">
 			
@@ -135,6 +137,16 @@
 	{/if}
 	</tbody>
 	<tr>
-		<td width="50%" class="Cdark" colspan="7"></td>
+		<td width="50%" class="Cnorm" colspan="7">Filter Options</td>
+	</tr>
+	<tr>
+		<td width="50%" class="Cmite" colspan="7">
+		<ul class="button-group">
+			<!--<li class="Cmite">Status Optionen:</li>-->
+			{foreach $status as $i}
+			<li><a href="admin.php?raid-s{$i.id}" style="{$i.style}">{$i.status}</a></li>
+			{/foreach}
+		</ul>
+		</td>
 	</tr>
 </table>

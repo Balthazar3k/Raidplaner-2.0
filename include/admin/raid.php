@@ -222,11 +222,19 @@ $design->header();
 
 $raid->setStatus(false);
 
+if( $menu->getA(1) == 's' ){
+	$statusID = $menu->getE(1);
+	$sqlWhere = "a.status='".$statusID."'";
+}else{
+	$sqlWhere = $kalender->where02("a.inv");
+}
+
+
 $smarty->assign('kalenderDate', $kalender->getDate());
 $smarty->assign('months', $kalender->months());
 $smarty->assign('monthName', $kalender->monthName());
 $smarty->assign('jahre', $kalender->years());
-$smarty->assign('status', $raid->simpleArray("SELECT id, status FROM prefix_raid_status WHERE sid='eventStatus'") );
+$smarty->assign('status', $raid->getRows("SELECT * FROM prefix_raid_status WHERE sid='eventStatus'") );
 $smarty->assign('events', $db->getRows( "
 	SELECT 
 		a.id, a.inv, a.pull, a.end, a.group, a.cycle, a.created, a.status,
@@ -242,7 +250,7 @@ $smarty->assign('events', $db->getRows( "
 		LEFT JOIN prefix_raid_status AS d ON a.status = d.id
 		LEFT JOIN prefix_raid_zeit AS e ON a.time = e.id
 		LEFT JOIN prefix_raid_charaktere AS f ON a.leader = f.id 
-	WHERE ".$kalender->where02("a.inv")."
+	WHERE ".$sqlWhere."
 	ORDER BY d.id, a.inv  ASC
 "));
 

@@ -310,3 +310,33 @@ form#apply label.error { display: none; }
 	font-family: Ubuntu, Tahoma; 
 	font-size: 13px; 
 }
+
+.button-group{
+	list-style: none;
+	padding: 0;
+	margin: auto;
+}
+
+.button-group li{
+	float: left;
+	border-left: 1px solid rgba( 0, 0, 0, 0.5);
+	border-top: 1px solid rgba( 0, 0, 0, 0.5);
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.5);
+}
+
+.button-group li:first-child {
+	border-radius: 3px 0 0 3px;
+}
+
+.button-group li:last-child {
+	border-radius: 0 3px 3px 0;
+	border-right: 1px solid rgba( 0, 0, 0, 0.5);
+}
+
+.button-group li a{
+	float: left;
+	display: block;
+
+	padding: 2px 5px 2px 5px;
+	text-decoration: none;
+}
